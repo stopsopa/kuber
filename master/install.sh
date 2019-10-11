@@ -2,15 +2,13 @@
 
 swapoff -a
 
-# echo "Removing old docker if any";
-# yum remove -y docker \
-#     docker-client \
-#     docker-client-latest \
-#     docker-common \
-#     docker-latest \
-#     docker-latest-logrotate \
-#     docker-logrotate \
-#     docker-engine
+# echo "Removing old docker if any"
+# yum remove -y docker docker-ce docker-ce-cli
+
+echo "Installing bare minimum soft"
+yum install -y firewalld httpd-tools \
+    && systemctl start firewalld \
+    && systemctl enable firewalld
 
 echo "Installing docker";
 yum install -y yum-utils \
@@ -19,7 +17,11 @@ yum install -y yum-utils \
 yum-config-manager \
     --add-repo \
     https://download.docker.com/linux/centos/docker-ce.repo
-yum install -y docker-ce docker-ce-cli containerd.io
+
+# yum list docker-ce     --showduplicates | sort -r  <---- check the CE  versions available
+# yum list docker-ce-cli --showduplicates | sort -r  <---- check the CLI versions available
+# yum install -y docker-ce docker-ce-cli containerd.io
+yum install -y docker-ce-18.09.9 docker-ce-cli-18.09.9 containerd.io
 
 systemctl start docker
 systemctl enable docker
@@ -51,11 +53,31 @@ net.bridge.bridge-nf-call-iptables = 1
 EOF
 sysctl --system
 
-echo "Deploying kubernetes (with Canal CNI)"
+echo "Deploying kubernetes"
 # if kubeadm is running and we re-run this install.sh then here it will throw fatal error
 # do kubeadm reset - to use this command again
-kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=NumCPU # add --apiserver-advertise-address="ip" if you want to use a different IP address than the main server IP
-export KUBECONFIG=/etc/kubernetes/admin.conf
+res=$(kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=NumCPU 2>&1) # add --apiserver-advertise-address="ip" if you want to use a different IP address than the main server IP
 
-echo "Applying CNI"
-kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/canal.yaml
+echo $res;
+
+ports=$(echo $res | egrep "firewalld is active, please ensure ports \[[0-9 ]+\] are open " | egrep -oh "(\[[0-9 ]+\])" | egrep -oh "[0-9 ]+")
+portsarray=($ports)
+
+# echo "..........";
+# echo ${portsarray}
+
+if (( ${#portsarray[@]} )); then
+    for i in "${portsarray[@]}"
+    do
+    echo "Opening port $i"
+    firewall-cmd --zone=public --add-port=$i/tcp --permanent
+
+    done
+
+    sudo firewall-cmd --reload
+fi;
+
+
+
+# echo "Applying CNI"
+# kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/canal.yaml
