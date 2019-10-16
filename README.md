@@ -1,4 +1,4 @@
-# Usage
+# Installing
 
 Create at least two droplets in DO: `kuber-master`, `kuber-node-01`, ...
 
@@ -17,3 +17,20 @@ On **the nodes**:
 - if you haven't copied the join command do below:
    - `kubeadm token create --print-join-command`
    - paste and execute
+
+<br />
+
+# Usage
+(Own registry: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
+
+
+<br />
+```
+kubectl run hw --image=image-here --port=80 (deprecated - use 'kubectl create' instead)
+kubectl get deployments
+kubectl get rs
+kubectl get pods
+kubectl expose deployment hw
+kubectl expose deployment hw --type=NodePort
+kubectl get services
+```
