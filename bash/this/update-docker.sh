@@ -29,7 +29,26 @@ else
 fi
 
 docker tag $HASH sdpii/piiapp:$NEXT
+
 docker push sdpii/piiapp:$NEXT
+
+node "$DIR/../node/yml/set.js" ../../../kubernetes/piiapp.yaml spec.template.spec.containers.0.image "sdpii/piiapp:$NEXT"
+
+cat << EOF
+
+  # push file piiapp.yaml
+
+  kub0
+  su kuber
+  kubectl apply -f test/2019-attempt-2/kubernetes/piiapp.yaml
+  kubectl get pods
+
+  # helpers
+  kubectl get services
+  
+
+EOF
+
 
 
 

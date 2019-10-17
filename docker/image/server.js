@@ -46,7 +46,7 @@ let content = `
             <h1>Kubernetes test app</h1>
             <div>host: HOSTNAME</div>
             <div>visits: COUNT</div>
-            <div>release: third</div>
+            <div>release: v0.0.7 new test</div>
         </div>
     </div>
 </body>
