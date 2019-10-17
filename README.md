@@ -34,3 +34,18 @@ kubectl expose deployment hw
 kubectl expose deployment hw --type=NodePort
 kubectl get services
 ```
+
+# Kubernetes live test
+
+```bash
+
+
+docker build -t piiapp:0.0.1 .
+docker-compose up
+
+docker tag f27a644125ab sdpii/piiapp:0.0.3
+docker push sdpii/piiapp:0.0.3
+
+
+```
+

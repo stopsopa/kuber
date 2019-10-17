@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: piiapp
+  labels:
+    app: piiapp
+spec:
+  # runtimeClassName: myclass # more: https://kubernetes.io/docs/concepts/containers/runtime-class/#usage
+  replicas: 2
+#  progressDeadlineSeconds: 600 # kubectl patch deployment.v1.apps/nginx-deployment -p '{"spec":{"progressDeadlineSeconds":600}}'
+  # minReadySeconds: # from: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#min-ready-seconds
+  selector:
+    matchLabels:
+      app: piiapp
+  # selector:
+  #   matchLabels:
+  #   component: redis
+  # matchExpressions:
+  #   - {key: tier, operator: In, values: [cache]}
+  #   - {key: environment, operator: NotIn, values: [dev]}
+  # topologySpreadConstraints: # https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  # - maxSkew: <integer>
+  #   topologyKey: <string>
+  #   whenUnsatisfiable: <string>
+  #   labelSelector: <object>
+#  strategy:
+#    rollingUpdate:
+#      maxSurge: 25%
+#      maxUnavailable: 25%
+#    type: RollingUpdate # might be also "Recreate" :  https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#recreate-deployment
+  template:
+    metadata:
+      labels:
+        app: piiapp
+    spec:
+      containers:
+        - name: piiapp
+          image: 'sdpii/piiapp:0.0.2'
+          ports:
+            - containerPort: 80
