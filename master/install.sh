@@ -1,6 +1,7 @@
 #!/bin/bash
 
 swapoff -a
+sed -i '/ swap / s/^/#/' /etc/fstab
 
 # echo "Removing old docker if any"
 # yum remove -y docker docker-ce docker-ce-cli
