@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: piiapp
-          image: 'sdpii/piiapp:0.0.20'
+          image: 'sdpii/piiapp:0.0.22'
           ports:
             - containerPort: 80
 --- service
@@ -30,6 +30,5 @@ spec:
     - targetPort: 80
       port: 80
       nodePort: 30010
-  selector: # just put everything from deployment metadata.labels
+  selector:
     app: piiapp
-

@@ -36,9 +36,9 @@ docker tag $HASH sdpii/piiapp:$NEXT
 
 docker push sdpii/piiapp:$NEXT
 
-node "$DIR/../bash/node/yml/set.js" ../../../001-simple-app/kubernetes/piiapp.yaml spec.template.spec.containers.0.image "sdpii/piiapp:$NEXT"
+node "$DIR/../bash/kuber/node/yml/set.js" kubernetes/piiapp.yaml _ spec.template.spec.containers.0.image "sdpii/piiapp:$NEXT"
 
-node "$DIR/../bash/node/yml/set.js" ../../../001-simple-app/docker/docker-compose.yml services.piiapp.image "piiapp:$NEXT"
+node "$DIR/../bash/node/yml/set.js" docker/docker-compose.yml services.piiapp.image "piiapp:$NEXT"
 
 cat << EOF
 
