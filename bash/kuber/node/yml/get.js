@@ -1,6 +1,4 @@
 
-// console.log(JSON.stringify(process.argv, null, 4));
-
 if (Object.keys(process.argv).length < 4) {
 
     throw `Not enough arguments: run:
