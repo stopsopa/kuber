@@ -1,7 +1,7 @@
 /**
  *
  *
-cat <<EOF | node ../bash/node/sertsemver.js
+cat <<EOF | node ../bash/node/sortsemver.js
 
 
  0.0.10

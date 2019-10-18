@@ -60,7 +60,7 @@ let content = `
             <div>host: HOSTNAME</div>
             <div>visits: COUNT</div>
             <div>manual: manual test</div>
-            <div>release: 0.0.12</div>
+            <div>release: 0.0.18</div>
             <div>status: <span class="status">online</span></div>
         </div>
     </div>
