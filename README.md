@@ -23,9 +23,10 @@ On **the nodes**:
 # Usage
 (Own registry: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
-
 <br />
-```
+
+```bash
+
 kubectl run hw --image=image-here --port=80 (deprecated - use 'kubectl create' instead)
 kubectl get deployments
 kubectl get rs
@@ -33,6 +34,7 @@ kubectl get pods
 kubectl expose deployment hw
 kubectl expose deployment hw --type=NodePort
 kubectl get services
+
 ```
 
 # Kubernetes live test
