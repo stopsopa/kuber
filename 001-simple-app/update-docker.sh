@@ -38,6 +38,8 @@ docker push sdpii/piiapp:$NEXT
 
 node "$DIR/../bash/node/yml/set.js" ../../../001-simple-app/kubernetes/piiapp.yaml spec.template.spec.containers.0.image "sdpii/piiapp:$NEXT"
 
+node "$DIR/../bash/node/yml/set.js" ../../../001-simple-app/docker/docker-compose.yml services.piiapp.image "piiapp:$NEXT"
+
 cat << EOF
 
   # push file piiapp.yaml
