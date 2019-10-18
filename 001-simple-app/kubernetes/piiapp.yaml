@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: piiapp
-          image: 'sdpii/piiapp:0.0.8'
+          image: 'sdpii/piiapp:0.0.11'
           ports:
             - containerPort: 80

@@ -1,5 +1,5 @@
 
-VER="$(docker images | grep piiapp | awk '{print $2}' | sort | tail -n 1)"
+VER="$(docker images | grep piiapp | awk '{print $2}' | node ../bash/node/sertsemver.js | tail -n 1)"
 
 TEST="^([0-9]+)\.([0-9]+)\.([0-9]+)(.*)$"
 

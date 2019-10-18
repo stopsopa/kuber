@@ -36,6 +36,10 @@ let content = `
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
         }
+        textarea {
+            font-size: 9px;
+            width:  350px;
+        }
     </style>
 </head>
 <body>
@@ -46,9 +50,33 @@ let content = `
             <h1>Kubernetes test app</h1>
             <div>host: HOSTNAME</div>
             <div>visits: COUNT</div>
-            <div>release: v0.0.7 new test</div>
+            <div>manual: status</div>
+            <div>release: v0.0.0</div>
+            <div>status: <span class="status">online</span></div>
         </div>
     </div>
+    <script>
+    
+        const status = document.querySelector('.status');
+        
+        ;(function test() {
+            
+            fetch('/delay?time=' + (new Date()).toISOString().substring(0, 19).replace('T', '-'))
+                .then(res => res.text())
+                .then(function (text) {
+                    
+                    status.innerHTML = text;
+                    
+                    test();
+                    
+                }, function () {
+                    
+                    status.innerHTML = 'offline';
+                    
+                    setTimeout(test, 1000)
+                });
+        }())    
+    </script>
 </body>
 </html>    
 `;
@@ -58,6 +86,13 @@ content = content.replace(/HOSTNAME/g, os.hostname());
 let i = 0;
 
 server.on('request', function (req, res) {
+
+    if (/^\/delay/.test(req.url)) {
+
+        const time = req.url.replace(/^.*?\?time=(.*)$/, '$1')
+
+        return setTimeout(() => res.end(`online: ${time}`), 1000);
+    }
 
     if (req.url !== '/favicon.ico') {
 
