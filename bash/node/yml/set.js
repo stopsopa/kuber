@@ -13,7 +13,7 @@ const path      = require('path');
 
 const fs        = require('fs');
 
-const file      = path.resolve(__dirname , process.argv[2]);
+const file      = path.resolve(process.cwd() , process.argv[2]);
 
 const key       = process.argv[3];
 
