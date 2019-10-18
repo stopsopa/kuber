@@ -23,8 +23,8 @@ On **the nodes**:
 # Usage
 (Own registry: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
 
-
 <br />
+
 ```bash
 
 kubectl run hw --image=image-here --port=80 (deprecated - use 'kubectl create' instead)
