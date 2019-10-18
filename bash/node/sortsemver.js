@@ -131,7 +131,7 @@ function sort(data) {
         d[3] = parseInt(d[3], 10);
         d[4] = parseInt(d[4], 10);
         return d;
-    })
+    });
 
     data.sort((a, b) => compare(`${a[2]}.${a[3]}.${a[4]}`, `${b[2]}.${b[3]}.${b[4]}`));
 

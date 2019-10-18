@@ -59,8 +59,8 @@ let content = `
             <h1>Kubernetes test app</h1>
             <div>host: HOSTNAME</div>
             <div>visits: COUNT</div>
-            <div>manual: manual test</div>
-            <div>release: 0.0.18</div>
+            <div>manual: manu xxxxx al test</div>
+            <div>release: 0.0.20</div>
             <div>status: <span class="status">online</span></div>
         </div>
     </div>
@@ -86,11 +86,15 @@ let content = `
                 });
         }())    
     </script>
+    
+    <pre>ENV</pre>
 </body>
 </html>    
 `;
 
 content = content.replace(/HOSTNAME/g, os.hostname());
+
+content = content.replace(/ENV/g, JSON.stringify(process.env, null, 4));
 
 let i = 0;
 

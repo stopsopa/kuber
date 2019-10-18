@@ -5,7 +5,7 @@ metadata:
   labels:
     app: piiapp
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: piiapp
@@ -16,6 +16,20 @@ spec:
     spec:
       containers:
         - name: piiapp
-          image: 'sdpii/piiapp:0.0.18'
+          image: 'sdpii/piiapp:0.0.20'
           ports:
             - containerPort: 80
+--- service
+apiVersion: v1
+kind: Service
+metadata:
+  name: piiapp-service
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 80
+      port: 80
+      nodePort: 30010
+  selector: # just put everything from deployment metadata.labels
+    app: piiapp
+
