@@ -32,12 +32,4 @@ spec:
       nodePort: 30010
   selector: # just put everything from deployment metadata.labels
     app: piiapp
-------- test
-key: test
-------- test2
-key: test2-1
-------- test2
-key: test2-2
-------- test3
-key: test3
 
