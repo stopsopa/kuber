@@ -11,6 +11,8 @@ NEXT="$(/bin/bash "$DIR/../bash/deploy/semver.sh" "$LAST" patch)"
 
 sed -i -r -E  "s/release: ([a-z]*[0-9]+\.[0-9]+\.[0-9]+)/release: $NEXT/g" docker/image/server.js
 
+rm -rf docker/images/server.js-r || true
+
 TAG="$(cd "$DIR/docker/image" && docker build -q -t piiapp:$NEXT .)"
 
 # sha256:92b3d46e063c8af9649fa9d2e12d8be74fefa131f4ba04cf45e120fc38d6d760

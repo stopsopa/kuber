@@ -5,6 +5,15 @@ var server      = http.createServer().listen(80);
 
 const os        = require('os');
 
+process.on('SIGINT', function (signal) {
+    console.log(`signal SIGINT..., signal: ${signal}`)
+    process.exit(0);
+});
+process.on('SIGTERM', function (signal) {
+    console.log(`signal SIGTERM..., signal: ${signal}`)
+    process.exit(0);
+});
+
 let content = `
 <!doctype html>
 <html lang="en">
@@ -50,8 +59,8 @@ let content = `
             <h1>Kubernetes test app</h1>
             <div>host: HOSTNAME</div>
             <div>visits: COUNT</div>
-            <div>manual: status</div>
-            <div>release: v0.0.0</div>
+            <div>manual: manual test</div>
+            <div>release: 0.0.12</div>
             <div>status: <span class="status">online</span></div>
         </div>
     </div>
