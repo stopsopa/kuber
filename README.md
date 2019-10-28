@@ -51,3 +51,8 @@ docker push sdpii/piiapp:0.0.3
 
 ```
 
+# Read more:
+- https://kubernetes.io/blog/2015/10/some-things-you-didnt-know-about-kubectl_28/
+- https://github.com/kubernetes/examples/tree/master/staging/cluster-dns
+- (configure the nodes’ resolv.conf) https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/#known-issues
+
