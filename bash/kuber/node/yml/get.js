@@ -1,4 +1,9 @@
-
+/**
+ * node get.js _ key.key
+ * node get.js 0 key.key
+ * node get.js 1 key.key
+ * node get.js title key.key
+ */
 if (Object.keys(process.argv).length < 4) {
 
     throw `Not enough arguments: run:

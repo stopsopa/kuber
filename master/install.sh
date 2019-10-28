@@ -11,6 +11,7 @@ yum install -y firewalld httpd-tools \
     && systemctl start firewalld \
     && systemctl enable firewalld
 
+# https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker vvv
 echo "Installing docker";
 yum install -y yum-utils \
     device-mapper-persistent-data \
@@ -23,10 +24,17 @@ yum-config-manager \
 # yum list docker-ce-cli --showduplicates | sort -r  <---- check the CLI versions available
 # yum install -y docker-ce docker-ce-cli containerd.io
 yum install -y docker-ce-18.09.9 docker-ce-cli-18.09.9 containerd.io
+# proper version of docker for this kuber version https://kubernetes.io/docs/setup/release/notes/#unchanged
 
 systemctl start docker
 systemctl enable docker
+# https://kubernetes.io/docs/setup/production-environment/container-runtimes/#docker ^^^
 
+# https://kubernetes.io/docs/tasks/debug-application-cluster/debug-service/#does-the-service-work-by-dns
+# install nslookup https://unix.stackexchange.com/a/164212
+yum install -y bind-utils
+
+# https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl vvv
 echo "Installing kubernetes"
 cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
@@ -46,6 +54,7 @@ yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 
 systemctl enable --now kubelet
 
+# Make sure that the br_netfilter module is loaded before this step. This can be done by running lsmod | grep br_netfilter. To load it explicitly call modprobe br_netfilter
 lsmod | grep br_netfilter && modprobe br_netfilter
 
 cat <<EOF >  /etc/sysctl.d/k8s.conf
@@ -53,6 +62,7 @@ net.bridge.bridge-nf-call-ip6tables = 1
 net.bridge.bridge-nf-call-iptables = 1
 EOF
 sysctl --system
+# https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#installing-kubeadm-kubelet-and-kubectl ^^^
 
 echo "Deploying kubernetes"
 # if kubeadm is running and we re-run this install.sh then here it will throw fatal error
@@ -82,3 +92,7 @@ fi;
 
 # echo "Applying CNI"
 # kubectl apply -f https://docs.projectcalico.org/v3.8/manifests/canal.yaml
+
+
+# some clue:
+  # https://github.com/ubuntu/microk8s/issues/536#issuecomment-509663386
