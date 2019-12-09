@@ -69,14 +69,38 @@ echo "Deploying kubernetes"
 # do kubeadm reset - to use this command again
 res=$(kubeadm init --pod-network-cidr=10.244.0.0/16 --ignore-preflight-errors=NumCPU 2>&1) # add --apiserver-advertise-address="ip" if you want to use a different IP address than the main server IP
 
+# expected output - when executed second time :/
+#[init] Using Kubernetes version: v1.16.2
+#[preflight] Running pre-flight checks
+#	[WARNING Firewalld]: firewalld is active, please ensure ports [6443 10250] are open or your cluster may not function correctly
+#	[WARNING IsDockerSystemdCheck]: detected "cgroupfs" as the Docker cgroup driver. The recommended driver is "systemd". Please follow the guide at https://kubernetes.io/docs/setup/cri/
+#error execution phase preflight: [preflight] Some fatal errors occurred:
+#	[ERROR Port-6443]: Port 6443 is in use
+#	[ERROR Port-10251]: Port 10251 is in use
+#	[ERROR Port-10252]: Port 10252 is in use
+#	[ERROR FileAvailable--etc-kubernetes-manifests-kube-apiserver.yaml]: /etc/kubernetes/manifests/kube-apiserver.yaml already exists
+#	[ERROR FileAvailable--etc-kubernetes-manifests-kube-controller-manager.yaml]: /etc/kubernetes/manifests/kube-controller-manager.yaml already exists
+#	[ERROR FileAvailable--etc-kubernetes-manifests-kube-scheduler.yaml]: /etc/kubernetes/manifests/kube-scheduler.yaml already exists
+#	[ERROR FileAvailable--etc-kubernetes-manifests-etcd.yaml]: /etc/kubernetes/manifests/etcd.yaml already exists
+#	[ERROR Port-10250]: Port 10250 is in use
+#	[ERROR Port-2379]: Port 2379 is in use
+#	[ERROR Port-2380]: Port 2380 is in use
+#	[ERROR DirAvailable--var-lib-etcd]: /var/lib/etcd is not empty
+#[preflight] If you know what you are doing, you can make a check non-fatal with `--ignore-preflight-errors=...`
+#To see the stack trace of this error execute with --v=5 or higher
+
+printf "\n\n=====vvv\n\n"
 echo $res;
+printf "\n\n=====^^^\n\n"
 
 ports=$(echo $res | egrep "firewalld is active, please ensure ports \[[0-9 ]+\] are open " | egrep -oh "(\[[0-9 ]+\])" | egrep -oh "[0-9 ]+")
 portsarray=($ports)
 
-# echo "..........";
-# echo ${portsarray}
+printf "\n\n=====vvv\n\n"
+ echo ${portsarray}
+printf "\n\n=====^^^\n\n"
 
+# https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/#check-required-ports
 if (( ${#portsarray[@]} )); then
     for i in "${portsarray[@]}"
     do
