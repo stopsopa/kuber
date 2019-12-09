@@ -1,5 +1,7 @@
 # Installing
 
+https://github.com/tomekwlod/kuber
+
 Create at least two droplets in DO: `kuber-master`, `kuber-node-01`, ...
 
 On a **master** node run:
@@ -55,4 +57,6 @@ docker push sdpii/piiapp:0.0.3
 - https://kubernetes.io/blog/2015/10/some-things-you-didnt-know-about-kubectl_28/
 - https://github.com/kubernetes/examples/tree/master/staging/cluster-dns
 - (configure the nodes’ resolv.conf) https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/#known-issues
+- https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/
+- https://www.nginx.com/products/nginx/kubernetes-ingress-controller
 

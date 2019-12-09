@@ -6,11 +6,11 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: nginxtest.phaseiilabs.com
+    - host: ingresstest001.phaseiilabs.com
       http:
         paths:
           - backend:
-              serviceName: piiapp
+              serviceName: piiapp-service
               servicePort: 80
 
 # Error from server: error dialing backend: dial tcp 178.128.41.233:10250: connect: no route to host
