@@ -1,0 +1,2 @@
+https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes
+g(How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean Kubernetes By Hanif Jetha)
