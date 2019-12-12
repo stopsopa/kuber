@@ -1,0 +1,24 @@
+# kubectl get CertificateRequest
+# kubectl describe CertificateRequest
+# kubectl get secret
+# kubectl describe secret kuber2-phaseiilabs-com-tls
+# from: https://cert-manager.io/docs/concepts/certificate/
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: kuber2-phaseiilabs-com
+  namespace: default
+spec:
+  secretName: kuber2-phaseiilabs-com-tls
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  commonName: kuber2.phaseiilabs.com
+  dnsNames:
+    - kuber2.phaseiilabs.com
+#    - kuber2.phaseiilabs.com -- can be other doman here - one certificat for many domains
+#     The dnsNames field specifies a list of Subject Alternative Names to be associated with the certificate.
+#      from: https://cert-manager.io/docs/concepts/certificate/
+
+#      - kuber.phaseiilabs.com
+#      - kuber2.phaseiilabs.com
