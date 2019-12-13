@@ -5,6 +5,8 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: nginx
     certmanager.k8s.io/cluster-issuer: letsencrypt-staging
+    #cert-manager.io/issuer: "letsencrypt-staging"
+
 #  annotations:
 #    kubernetes.io/ingress.class: nginx
 #    certmanager.k8s.io/cluster-issuer: letsencrypt-prod

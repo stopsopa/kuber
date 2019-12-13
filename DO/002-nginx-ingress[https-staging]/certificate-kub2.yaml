@@ -12,7 +12,7 @@ spec:
   secretName: kuber2-phaseiilabs-com-tls
   issuerRef:
     name: letsencrypt-staging
-    kind: ClusterIssuer
+    kind: ClusterIssuer # https://cert-manager.io/docs/concepts/certificate/    We can reference ClusterIssuers by changing the kind here
   commonName: kuber2.phaseiilabs.com
   dnsNames:
     - kuber2.phaseiilabs.com
