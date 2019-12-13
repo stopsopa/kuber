@@ -1,0 +1,2 @@
+
+- test self signed type certificate https://cert-manager.io/docs/configuration/
