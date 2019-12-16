@@ -1,7 +1,15 @@
+# kubectl describe certificate
+# kubectl get ClusterIssuer
 # kubectl get CertificateRequest
 # kubectl describe CertificateRequest
 # kubectl get secret
 # kubectl describe secret kuber2-phaseiilabs-com-tls
+# kubectl get order
+# kubectl describe order letsencrypt-staging-3191405817-201835114
+#
+#
+#
+#
 # from: https://cert-manager.io/docs/concepts/certificate/
 apiVersion: cert-manager.io/v1alpha2
 kind: Certificate
