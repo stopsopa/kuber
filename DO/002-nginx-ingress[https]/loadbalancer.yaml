@@ -11,7 +11,7 @@ metadata:
     service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: "true"
     service.beta.kubernetes.io/do-loadbalancer-algorithm: "round_robin"
     service.beta.kubernetes.io/do-loadbalancer-tls-ports: "443"
-    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "57b17f9e-995b-4fd3-898b-8627b51df850"
+    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "876d5842-8e6e-4c2e-a1f2-aad78eed688e"
 spec:
   #externalTrafficPolicy: Local
   type: LoadBalancer
@@ -28,7 +28,7 @@ spec:
       port: 443
       targetPort: 80
 
----
+# ---
 
 # examples:
 #     https://github.com/digitalocean/digitalocean-cloud-controller-manager/tree/master/docs/controllers/services/examples
