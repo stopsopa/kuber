@@ -15,6 +15,5 @@ kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/relea
         # if there will be listed any version of cert manager installed wrom helm then:
         helm del --purge cert-manager
 
-        kubectl get pods --namespace cert-manager
         kubectl get deployment --namespace cert-manager
         kubectl delete  deployment cert-manager  cert-manager-cainjector  cert-manager-webhook  --namespace cert-manager
