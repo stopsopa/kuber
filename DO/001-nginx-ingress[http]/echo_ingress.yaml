@@ -19,6 +19,12 @@ spec:
           - backend:
               serviceName: piiapp-service
               servicePort: 80
+    - host: httptest.phaseiilabs.com
+      http:
+        paths:
+          - backend:
+              serviceName: piiapp-service
+              servicePort: 80
     - host: kuber2.phaseiilabs.com
       http:
         paths:
