@@ -1,0 +1,40 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
+    service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: "true"
+    service.beta.kubernetes.io/do-loadbalancer-algorithm: "round_robin"
+    service.beta.kubernetes.io/do-loadbalancer-tls-ports: "443"
+    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "876d5842-8e6e-4c2e-a1f2-aad78eed688e"
+spec:
+  #externalTrafficPolicy: Local
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 80
+
+# ---
+
+# examples:
+#     https://github.com/digitalocean/digitalocean-cloud-controller-manager/tree/master/docs/controllers/services/examples
+# main doc: How to Add Load Balancers to Kubernetes Clusters
+#     https://www.digitalocean.com/docs/kubernetes/how-to/add-load-balancers/
+# main doc: How to Configure SSL Termination
+#     https://www.digitalocean.com/docs/networking/load-balancers/how-to/ssl-termination/#add-an-ssl-certificate
+# generating do cert using cli
+# https://blog.andrewsomething.com/2019/04/04/external-dns-with-ssl-on-k8s/
