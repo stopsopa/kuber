@@ -6,12 +6,6 @@ metadata:
   labels:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
-  annotations:
-    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
-    service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: "true"
-    service.beta.kubernetes.io/do-loadbalancer-algorithm: "round_robin"
-    service.beta.kubernetes.io/do-loadbalancer-tls-ports: "443"
-    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "e3c2bc98-47f0-4015-8a77-9f9c801604b5"
 spec:
 #  externalTrafficPolicy: Local
   type: LoadBalancer
