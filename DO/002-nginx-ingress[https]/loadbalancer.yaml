@@ -11,7 +11,7 @@ metadata:
     service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: "true"
     service.beta.kubernetes.io/do-loadbalancer-algorithm: "round_robin"
     service.beta.kubernetes.io/do-loadbalancer-tls-ports: "443"
-    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "876d5842-8e6e-4c2e-a1f2-aad78eed688e"
+    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "eebf2fd0-8331-4432-8d37-87ce0631869a"
 spec:
   #externalTrafficPolicy: Local
   type: LoadBalancer
