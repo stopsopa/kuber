@@ -17,12 +17,14 @@ yum install -y epel-release \
     && pip install docker-compose requests urllib3 pyOpenSSL --force --upgrade
 yum upgrade -y python*
 
-docker run -it --rm --name certbot -p 80:80 \
-    -v "/etc/letsencrypt:/etc/letsencrypt" \
-    -v "/var/lib/letsencrypt:/var/lib/letsencrypt" \
-    certbot/certbot certonly \
-    --standalone -d ${DOCKERREGISTRY} --preferred-challenges http \
-    --agree-tos -n -m ${CERTBOT_EMAIL}
+CMD="$(cat <<EOF
+docker run -it --rm --name certbot -p 80:80 -v /etc/letsencrypt:/etc/letsencrypt -v /var/lib/letsencrypt:/var/lib/letsencrypt certbot/certbot certonly --standalone -d ${DOCKERREGISTRY} --preferred-challenges http --agree-tos -n -m ${CERTBOT_EMAIL}
+EOF
+)"
+
+printf "\n\n$CMD\n\n";
+
+$CMD;
 
 htpasswd -cBb ~/.htpasswd ${PASSWD_USER} ${PASSWD_PASSWORD}
 

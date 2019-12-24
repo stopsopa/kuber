@@ -102,17 +102,30 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 chmod a+wx /usr/local/bin/docker-compose
                 docker-compose --version
 
-
             # now install DOCKER HUB:  https://docs.docker.com/registry/deploying/
-            mkdir -p /opt/docker-registry/ && cd /opt/docker-registry/
-            git clone https://github.com/tomekwlod/docker-registry.git .
+            mkdir -p /opt/docker-registry/ && echo "cd /opt/docker-registry/" > doc && chmod a+x doc && cd /opt/docker-registry/
+            git clone https://github.com/stopsopa/kuber.git && mv kuber/DO/docker-registry/* . && rm -rf kuber/
+
+            # test connectivity to domain:
+                    mkdir node && cd node
+                    yum -y install wget
+                    sudo firewall-cmd --zone=public --add-port=8080/tcp --permanent
+                    sudo firewall-cmd --reload
+                    wget https://nodejs.org/download/release/v8.15.1/node-v8.15.1-linux-x64.tar.gz
+                    tar --strip-components 1 -xzvf node-v* -C /usr/local
+                    npx npx-server server.js controllers
+                    node server.js --port 8080 & disown
+                    curl -I localhost:8080
+                    cd ..
+
+            # git clone https://github.com/tomekwlod/docker-registry.git .
 
             WARNING: edit file
                 vi Infrastructure/Registry/.env
 
             /bin/bash install.sh
 
-            # then try to login from clis
+            # then try to login from cli
             docker login https://dochub.phaseiilabs.com
             vi ~/.docker/config.json
 
