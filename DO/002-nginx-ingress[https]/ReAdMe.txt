@@ -127,10 +127,39 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 vi Infrastructure/Registry/.env
 
             /bin/bash install.sh
+            
+            # to test repository:
+                
+                https://docker-registry.phaseiilabs.com/v2/
+                
+                https://docker-registry.phaseiilabs.com/v2/_catalog
+                
+                https://docker-registry.phaseiilabs.com/v2/{your-repo-name-here}/tags/list
+                
+                https://docker-registry.phaseiilabs.com/v2/twlphaseii/node-jenkins-docker/manifests/latest
+                    # to download and see the metadata for the tag
 
             # then try to login from cli
             docker login https://docker-registry.phaseiilabs.com
+            docker login https://docker-registry.phaseiilabs.com --username=yourhubusername --password=yourpassword
             cat ~/.docker/config.json
+
+            docker login https://docker-registry.phaseiilabs.com
+            vi ~/.docker/config.json <--- the creds will go here
+
+            # https://docs.docker.com/engine/reference/commandline/build/
+            # execute it in directory https://github.com/stopsopa/kuber/tree/master/001-simple-app/docker/image
+                REGISTRY="docker-registry.phaseiilabs.com"
+                APP="tapp"
+                VER="0.0.2"
+                docker build -t $APP:$VER .
+                docker tag $APP:$VER $REGISTRY/$APP:$VER
+                docker push $REGISTRY/$APP:$VER
+
+                # TAG="$(docker build -t $APP:$VER . | grep " built " | awk '{print $3}')"
+                # docker history tapp:0.0.1
+                # https://docker-registry.phaseiilabs.com/v2/tapp/tags/list
+
 Read more:
     https://www.digitalocean.com/docs/networking/dns/how-to/create-caa-records/
 
