@@ -34,9 +34,9 @@ Check now if everything is working as expected by visiting one of links:
 
 * `https://docker.domain.com/v2/_catalog`
 
-* `https://docker.phaseiilabs.com/v2/{your-repo-name-here}/tags/list`
+* `https://docker.domain.com/v2/{your-repo-name-here}/tags/list`
 
-* `https://docker.phaseiilabs.com/v2/twlphaseii/node-jenkins-docker/manifests/latest` <-- to download and see the metadata for the tag
+* `https://docker.domain.com/v2/twlphaseii/node-jenkins-docker/manifests/latest` <-- to download and see the metadata for the tag
 
 <br />
 
