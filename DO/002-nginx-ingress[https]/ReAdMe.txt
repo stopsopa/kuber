@@ -35,7 +35,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
 
             from: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes#step-2-%E2%80%94-setting-up-the-kubernetes-nginx-ingress-controller
 
-    * create https certificate:
+    * create https certificate: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
         doctl compute certificate list
         doctl compute certificate create --name certv002 --type lets_encrypt --dns-names httptest.phaseiilabs.com,kuber.phaseiilabs.com,kuber2.phaseiilabs.com
         doctl compute certificate get eebf2fd0-8331-4432-8d37-87ce0631869a
@@ -104,7 +104,8 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
 
             # now install DOCKER HUB:  https://docs.docker.com/registry/deploying/
             mkdir -p /opt/docker-registry/ && echo "cd /opt/docker-registry/" > doc && chmod a+x doc && cd /opt/docker-registry/
-            git clone https://github.com/stopsopa/kuber.git && mv kuber/DO/docker-registry/* . && rm -rf kuber/
+            git clone https://github.com/tomekwlod/kuber.git && mv kuber/DO/docker-registry/* . && rm -rf kuber/
+            # git clone https://github.com/stopsopa/kuber.git && mv kuber/DO/docker-registry/* . && rm -rf kuber/
 
             # test connectivity to domain:
                     mkdir node && cd node
@@ -128,12 +129,8 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
             /bin/bash install.sh
 
             # then try to login from cli
-            docker login https://dochub.phaseiilabs.com
-            vi ~/.docker/config.json
-
-            # create certificate https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
-                doctl compute certificate create --name certv001 --type lets_encrypt --dns-names httptest.phaseiilabs.com,kuber.phaseiilabs.com,kuber2.phaseiilabs.com
-
+            docker login https://docker-registry.phaseiilabs.com
+            cat ~/.docker/config.json
 Read more:
     https://www.digitalocean.com/docs/networking/dns/how-to/create-caa-records/
 
