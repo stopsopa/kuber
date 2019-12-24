@@ -118,6 +118,8 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                     curl -I localhost:8080
                     cd ..
 
+            # make sure that DNS is globally propagated, uset tools like https://dnschecker.org/#A/
+
             # git clone https://github.com/tomekwlod/docker-registry.git .
 
             WARNING: edit file
