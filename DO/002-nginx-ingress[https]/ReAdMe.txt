@@ -77,6 +77,47 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
 
             helm install --name cert-manager --namespace kube-system jetstack/cert-manager --version v0.12.0
 
+    * creating docker repository
+
+        Centos installation process:
+               https://docs.docker.com/install/linux/docker-ce/centos/#install-using-the-repository
+                   g(Get Docker Engine - Community for CentOS)
+
+            yum install -y yum-utils device-mapper-persistent-data lvm2
+            yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+            # INSTALL DOCKER ENGINE - COMMUNITY
+                yum install -y docker-ce docker-ce-cli containerd.io
+
+                yum list docker-ce --showduplicates | sort -r     # from https://docs.docker.com/install/linux/docker-ce/centos/#install-docker-engine---community-1
+                version: docker-ce.x86_64    3:19.03.5-3.el7     docker-ce-stable
+
+                yum install -y docker-ce-<VERSION_STRING> docker-ce-cli-<VERSION_STRING> containerd.io
+                yum install -y docker-ce-19.03.5 docker-ce-cli-19.03.5 containerd.io
+                systemctl start docker
+                yum install -y git
+
+            # install docker compose  https://docs.docker.com/compose/install/
+                curl -L "https://github.com/docker/compose/releases/download/1.25.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                chmod a+wx /usr/local/bin/docker-compose
+                docker-compose --version
+
+
+            # now install DOCKER HUB:  https://docs.docker.com/registry/deploying/
+            mkdir -p /opt/docker-registry/ && cd /opt/docker-registry/
+            git clone https://github.com/tomekwlod/docker-registry.git .
+
+            WARNING: edit file
+                vi Infrastructure/Registry/.env
+
+            /bin/bash install.sh
+
+            # then try to login from clis
+            docker login https://dochub.phaseiilabs.com
+            vi ~/.docker/config.json
+
+            # create certificate https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
+                doctl compute certificate create --name certv001 --type lets_encrypt --dns-names httptest.phaseiilabs.com,kuber.phaseiilabs.com,kuber2.phaseiilabs.com
 
 Read more:
     https://www.digitalocean.com/docs/networking/dns/how-to/create-caa-records/
