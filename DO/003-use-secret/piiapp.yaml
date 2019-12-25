@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: piiapp
+  labels:
+    app: piiapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: piiapp
+  template:
+    metadata:
+      labels:
+        app: piiapp
+    spec:
+      containers:
+        - name: piiapp
+          image: 'sdpii/piiapp:0.0.22'
+          ports:
+            - containerPort: 80
+          env: # https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-environment-variables
+            - name: Z_003VAR
+              valueFrom:
+                secretKeyRef:
+                  name: 003secret
+                  key: 003var
+            - name: Z_003VAR2
+              valueFrom:
+                secretKeyRef:
+                  name: 003secret
+                  key: 003var2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: piiapp-service
+spec:
+  #  type: NodePort
+  ports:
+    - targetPort: 80
+      port: 80
+  #      nodePort: 30010
+  selector:
+    app: piiapp
