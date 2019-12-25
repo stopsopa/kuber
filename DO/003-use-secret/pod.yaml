@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: podapp
+spec:
+  containers:
+    - name: podapp
+      image: "docker-registry.phaseiilabs.com/tapp:0.0.5"
+#      imagePullPolicy: IfNotPresent
+  imagePullSecrets:
+    - name: regcred

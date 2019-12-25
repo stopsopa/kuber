@@ -77,7 +77,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
 
             helm install --name cert-manager --namespace kube-system jetstack/cert-manager --version v0.12.0
 
-    * creating docker repository
+    * Creating docker repository/registry
 
         Centos installation process:
                https://docs.docker.com/install/linux/docker-ce/centos/#install-using-the-repository
@@ -151,7 +151,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
             # execute it in directory https://github.com/stopsopa/kuber/tree/master/001-simple-app/docker/image
                 REGISTRY="docker-registry.phaseiilabs.com"
                 APP="tapp"
-                VER="0.0.2"
+                VER="0.0.3"
                 docker build -t $APP:$VER .
                 docker tag $APP:$VER $REGISTRY/$APP:$VER
                 docker push $REGISTRY/$APP:$VER
@@ -159,6 +159,28 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 # TAG="$(docker build -t $APP:$VER . | grep " built " | awk '{print $3}')"
                 # docker history tapp:0.0.1
                 # https://docker-registry.phaseiilabs.com/v2/tapp/tags/list
+                # docker run -it node:10-alpine node -v   # https://hub.docker.com/_/node/
+
+    * Using private registry from kubernetes
+        # g(Pull an Image from a Private Registry)
+        # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials
+
+        # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-by-providing-credentials-on-the-command-line
+
+        docker run -p 8082:80 docker-registry.phaseiilabs.com/tapp:0.0.5
+
+        kubectl delete secret regcred
+        kubectl create secret docker-registry regcred \
+            --docker-server=docker-registry.phaseiilabs.com \
+            --docker-username=admin \
+            --docker-password=password \
+            --docker-email=admin@gmail.com
+
+        kubectl get secrets
+        kubectl get secret regcred --output=yaml
+        kubectl get secret regcred --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
+
+kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
 
 Read more:
     https://www.digitalocean.com/docs/networking/dns/how-to/create-caa-records/
