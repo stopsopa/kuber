@@ -1,6 +1,6 @@
 #FROM node:10
 FROM node:10-alpine
-# https://github.com/mhart/alpine-node
+# https://hub.docker.com/_/node/
 
 # to see size difference run:
 #$ docker history tapp:0.0.1
@@ -49,6 +49,6 @@ COPY server.js .
 
 EXPOSE 80
 
-CMD [ "node", "server.js" ]
+CMD [ "node", "server.js", "--port", "80", "--info", "--edit" ]
 
 
