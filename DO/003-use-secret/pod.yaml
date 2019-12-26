@@ -5,7 +5,7 @@ metadata:
 spec:
   containers:
     - name: podapp
-      image: "docker-registry.phaseiilabs.com/tapp:0.0.5"
+      image: "docker-registry.phaseiilabs.com/tapp:0.0.7"
 #      imagePullPolicy: IfNotPresent
   imagePullSecrets:
     - name: regcred
