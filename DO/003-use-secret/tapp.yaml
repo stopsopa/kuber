@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: tapp
-          image: "docker-registry.phaseiilabs.com/tapp:0.0.7" # docker run -p 8082:80 docker-registry.phaseiilabs.com/tapp:0.0.2
+          image: "docker-registry.phaseiilabs.com/tapp:0.0.6" # docker run -p 8082:80 docker-registry.phaseiilabs.com/tapp:0.0.2
           ports:
             - containerPort: 80
 #          imagePullPolicy: IfNotPresent

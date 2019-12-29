@@ -180,6 +180,49 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
         kubectl get secret regcred --output=yaml
         kubectl get secret regcred --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
 
+    * volumes:
+        # problems in DO [table]:
+            https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
+            [table] https://kubernetes.io/docs/concepts/storage/storage-classes/#provisioner
+
+        # Reasearch:
+            # maybe create our own storage?
+                # https://www.youtube.com/watch?v=hqE5c5pyfrk
+                    On prem options:
+                        - GlusterFS https://www.gluster.org/
+                        - Ceph https://www.reddit.com/r/sysadmin/comments/9onemk/ceph_vs_glusterfs/
+                    Backups:
+                        - https://aws.amazon.com/glacier/ - VERY CHEAP RELIABLE
+                    PostgresDB:
+                        - https://aws.amazon.com/ebs/
+                            DOWNSIDE OF EBS IS ATTACHING AND DETACHING FROM K8S NODE - FROM 40 SEC TO AN HOUR !!! https://youtu.be/hqE5c5pyfrk?t=1068
+                            might be ok if you will keep deployment on the same nodes
+                            more: https://docs.docker.com/ee/ucp/kubernetes/storage/configure-aws-storage/
+                        - on prem - storageos
+                    https://i.imgur.com/zHqhMGj.png
+                    https://i.imgur.com/MbOPngz.png
+                    Cloud Native Storage
+                    CNCF [Cloud Native Computing Foundation]
+                    https://storageos.com/
+                    iscsi
+                    persistant volume claim
+                https://www.digitalocean.com/community/tutorials/object-storage-vs-block-storage-services#what-is-block-storage
+
+            # try then glusterFS
+                sudo yum install ansible
+                    from: https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-the-control-node
+                # naaa, not good
+            # rook from:
+                kubectl apply -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/common.yaml
+                kubectl apply -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/operator.yaml
+                kubectl apply -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/toolbox.yaml
+                    kubectl -n rook-ceph exec -it $(kubectl -n rook-ceph get pod -l "app=rook-ceph-tools" -o jsonpath='{.items[0].metadata.name}') bash
+                        # from : https://rook.io/docs/rook/v1.2/ceph-toolbox.html
+                    ceph status
+                    ceph osd status
+                    ceph df
+                    rados df   from: https://rook.io/docs/rook/v1.2/ceph-toolbox.html#running-the-toolbox-in-kubernetes
+
 kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
 
 Read more:
