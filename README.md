@@ -62,5 +62,5 @@ docker push sdpii/piiapp:0.0.3
 
 # Detailed readme
 
-[link](/kuber/tree/master/DO/002-nginx-ingress%5Bhttps%5D)
+[link](/DO/002-nginx-ingress%5Bhttps%5D)
 
