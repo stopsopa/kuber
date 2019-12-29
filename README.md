@@ -60,3 +60,7 @@ docker push sdpii/piiapp:0.0.3
 - https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/
 - https://www.nginx.com/products/nginx/kubernetes-ingress-controller
 
+# Detailed readme
+
+[link](/kuber/tree/master/DO/002-nginx-ingress%5Bhttps%5D)
+
