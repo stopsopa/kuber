@@ -988,10 +988,12 @@ else {
 
             if (edit) {
 
-                // fetch('/___raz.txt', {
-                //     method: 'delete',
-                //     body: JSON.stringify({post: 'dwa'})
-                // }).then(req => req.json()).then(json => console.log(json))
+                // fetch('test.txt', {
+                //     method: 'PATCH', // must be uppercase, I'm not entirely sure why
+                //     body: JSON.stringify({
+                //         new: '/pvc/te.txt' // must be absolute path from web dir.. for now @todo - maybe it shouldn't be?
+                //     })
+                // })
 
                 if (method === 'PATCH') {
 
@@ -1021,8 +1023,18 @@ else {
 
                         try {
 
-                            var n = path.resolve(dir, '.' + path.sep + (decodeURI(json.new).replace(/\.\.+/g, '.')));
+                            var n;
 
+
+                            if (json.new.substring(0, 1) === '/') {
+
+                                n = path.resolve(dir, '.' + path.sep + (decodeURI(json.new).replace(/\.\.+/g, '.')));
+                            }
+                            else {
+
+                                n = path.resolve(path.dirname(file), '.' + path.sep + (decodeURI(json.new).replace(/\.\.+/g, '.')));
+                            }
+                            
                             log(`${time()} PATCH (RENAME): ${file} -> ${n}`);
 
                             if ( fs.existsSync(n) ) {

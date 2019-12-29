@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: echo-ingress
+  name: phaseii-ingress
 spec:
   rules:
     - host: kuber.phaseiilabs.com
@@ -14,11 +14,11 @@ spec:
       http:
         paths:
           - backend:
-              serviceName: piiapp-service
+              serviceName: echo2
               servicePort: 80
     - host: kuber2.phaseiilabs.com
       http:
         paths:
           - backend:
-              serviceName: echo2
+              serviceName: tapp-service
               servicePort: 80
