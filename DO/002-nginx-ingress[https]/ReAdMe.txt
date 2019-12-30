@@ -20,14 +20,17 @@ based on:
 https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes
 g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean Kubernetes By
 
-    * helm
+    ** helm
+    -------------------------------
         https://www.digitalocean.com/community/tutorials/how-to-install-software-on-kubernetes-clusters-with-the-helm-package-manager#step-1-%E2%80%94-installing-helm
 
-    * install tiller
+    ** install tiller
+    -------------------------------
         https://www.digitalocean.com/community/tutorials/how-to-install-software-on-kubernetes-clusters-with-the-helm-package-manager#step-2-%E2%80%94-installing-tiller
                 helm version
 
-    * Installing Kubernetes Nginx Ingress Controller in the cluster:
+    ** Installing Kubernetes Nginx Ingress Controller in the cluster:
+    -------------------------------
 
         WARNING: we have updated version in link
 
@@ -35,12 +38,14 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
 
             from: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes#step-2-%E2%80%94-setting-up-the-kubernetes-nginx-ingress-controller
 
-    * create https certificate: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
+    ** create https certificate: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
+    -------------------------------
         doctl compute certificate list
         doctl compute certificate create --name certv002 --type lets_encrypt --dns-names httptest.phaseiilabs.com,kuber.phaseiilabs.com,kuber2.phaseiilabs.com
         doctl compute certificate get eebf2fd0-8331-4432-8d37-87ce0631869a
 
-    * Creating loadbalancer in DO:
+    ** Creating loadbalancer in DO:
+    -------------------------------
 
         WARNING: we have updated version in link
 
@@ -62,6 +67,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 kubectl describe svc kube-test-loadbalancer
 
     * (NOT NECESSARY) installing cert-manager from:
+    -------------------------------
 
         WARNING: we have updated version in link
 
@@ -78,6 +84,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
             helm install --name cert-manager --namespace kube-system jetstack/cert-manager --version v0.12.0
 
     * Creating docker repository/registry
+    -------------------------------
 
         Centos installation process:
                https://docs.docker.com/install/linux/docker-ce/centos/#install-using-the-repository
@@ -162,6 +169,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 # docker run -it node:10-alpine node -v   # https://hub.docker.com/_/node/
 
     * Using private registry from kubernetes
+    -------------------------------
         # g(Pull an Image from a Private Registry)
         # https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#registry-secret-existing-credentials
 
@@ -181,6 +189,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
         kubectl get secret regcred --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
 
     * volumes:
+    -------------------------------
         # problems in DO [table]:
             https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
             [table] https://kubernetes.io/docs/concepts/storage/storage-classes/#provisioner
