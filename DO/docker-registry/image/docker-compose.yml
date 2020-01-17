@@ -2,7 +2,10 @@ version: '3.0'
  
 services:
   ownregistry:
-    image: registry:latest
+#    image: registry:2.7.1
+    build:
+      context: image
+      dockerfile: Dockerfile
     container_name: docker-registry
     volumes:
       # - registry:/var/lib/registry

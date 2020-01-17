@@ -12,11 +12,6 @@ if [ "$1" = "list" ]; then
     exit $?;
 fi
 
-if [ "$1" != "" ]; then
-
-    VER="$1";
-fi
-
 cd docker
 docker build -t $APP:$VER .
 docker tag $APP:$VER $REGISTRY/$APP:$VER

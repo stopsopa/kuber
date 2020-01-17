@@ -1,4 +1,4 @@
 build:
-	/bin/bash build.sh 0.0.8
+	/bin/bash build.sh
 list:
 	/bin/bash build.sh list

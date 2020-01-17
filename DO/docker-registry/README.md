@@ -24,7 +24,7 @@ It is a collection of docker images with the same name and different tags (simil
 - go to this server and:
 - `cd /opt/docker-registry/`
 - `git clone https://github.com/tomekwlod/docker-registry.git .`
-- change secrets in `Infrastructure/Registry/.env` (or copy the .env.prod to .env) and `docker-compose.yml` if needed
+- change secrets in `image/.env` (or copy the .env.prod to .env) and `docker-compose.yml` if needed
 - `/bin/bash install.sh`
 
 <br />

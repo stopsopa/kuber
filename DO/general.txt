@@ -1,0 +1,5 @@
+
+# https://www.digitalocean.com/community/tutorials/how-to-use-doctl-the-official-digitalocean-command-line-client
+doctl compute droplet list
+doctl compute droplet get 172720841 --output json
+doctl compute droplet get 172720841
