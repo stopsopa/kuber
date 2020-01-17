@@ -9,9 +9,20 @@ metadata:
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
     service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: "true"
-    service.beta.kubernetes.io/do-loadbalancer-algorithm: "round_robin"
+
+    # https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
+    service.beta.kubernetes.io/do-loadbalancer-algorithm: "round_robin" # least_connections
     service.beta.kubernetes.io/do-loadbalancer-tls-ports: "443"
-    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "eebf2fd0-8331-4432-8d37-87ce0631869a"
+    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "40f702ff-88b3-47b0-b849-865b315c8fa1"
+
+    # kubectl get svc ingress-nginx -n ingress-nginx  -o jsonpath="{.metadata.annotations.service\.beta\.kubernetes\.io/do-loadbalancer-algorithm}"
+    # kubectl annotate --overwrite -f loadbalancer.yaml service.beta.kubernetes.io/do-loadbalancer-algorithm=least_connections
+    # kubectl get svc ingress-nginx -n ingress-nginx  -o jsonpath="{.metadata.annotations.service\.beta\.kubernetes\.io/do-loadbalancer-certificate-id}"
+    # kubectl annotate --overwrite -f loadbalancer.yaml service.beta.kubernetes.io/do-loadbalancer-algorithm=round_robin
+    # kubectl get svc ingress-nginx -n ingress-nginx  -o jsonpath="{.metadata.annotations.service\.beta\.kubernetes\.io/do-loadbalancer-certificate-id}"
+    # kubectl annotate --overwrite -f loadbalancer.yaml service.beta.kubernetes.io/do-loadbalancer-certificate-id=40f702ff-88b3-47b0-b849-865b315c8fa1
+
+    # kubectl get -f loadbalancer.yaml -o jsonpath="{.metadata.annotations.service\.beta\.kubernetes\.io/do-loadbalancer-certificate-id}"
 spec:
   #externalTrafficPolicy: Local
   type: LoadBalancer

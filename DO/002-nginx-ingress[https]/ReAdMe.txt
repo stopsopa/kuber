@@ -2,7 +2,6 @@
 
 # cli - installing cli on dev machine and "talk" to kubernetes remotely
 
-    # from: https://confluence.atlassian.com/bitbucketserverkb/13-permission-denied-while-connecting-to-upstream-while-configuring-ngnix-803374014.html
     cli:
         kubectl doctl:
             # first install and init doctl:
@@ -10,11 +9,15 @@
              # then copy config
                  https://www.digitalocean.com/docs/kubernetes/how-to/connect-to-cluster/#generating-a-kubectl-configuration-via-command-line
                  doctl auth init   # to get token follow https://github.com/digitalocean/doctl#authenticating-with-digitalocean
+                    https://cloud.digitalocean.com/account/api/tokens
+
                  doctl kubernetes cluster list
                  doctl kubernetes cluster kubeconfig save k8s-kubii
                      # it makes some mess here: https://cloud.digitalocean.com/account/api/tokens
-             # verify:
-                 kubectl get nodes
+        install kubectl
+            # https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl-on-linux
+            # verify:
+                kubectl get nodes
 
 based on:
 https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes
@@ -41,8 +44,10 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
     ** create https certificate: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
     -------------------------------
         doctl compute certificate list
-        doctl compute certificate create --name certv002 --type lets_encrypt --dns-names httptest.phaseiilabs.com,kuber.phaseiilabs.com,kuber2.phaseiilabs.com
+        doctl compute certificate create --name certv003 --type lets_encrypt --dns-names httptest.phaseiilabs.com,kuber.phaseiilabs.com,kuber2.phaseiilabs.com,lhhub.phaseiilabs.com,nossl.phaseiilabs.com
         doctl compute certificate get eebf2fd0-8331-4432-8d37-87ce0631869a
+
+        kubectl get -f loadbalancer.yaml -o jsonpath="{.metadata}"
 
     ** Creating loadbalancer in DO:
     -------------------------------
@@ -102,6 +107,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 yum install -y docker-ce-<VERSION_STRING> docker-ce-cli-<VERSION_STRING> containerd.io
                 yum install -y docker-ce-19.03.5 docker-ce-cli-19.03.5 containerd.io
                 systemctl start docker
+                systemctl enable docker
                 yum install -y git
 
             # install docker compose  https://docs.docker.com/compose/install/
@@ -126,16 +132,16 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                     curl -I localhost:8080
                     cd ..
 
-            # make sure that DNS is globally propagated, uset tools like https://dnschecker.org/#A/
+            # make sure that DNS is globally propagated, use tools like https://dnschecker.org/#A/
 
             # git clone https://github.com/tomekwlod/docker-registry.git .
 
             WARNING: edit file
-                vi Infrastructure/Registry/.env
+                vi image/.env
 
             /bin/bash install.sh
             
-            # to test repository:
+            # to test repository: https://docs.docker.com/registry/spec/api/#detail
                 
                 https://docker-registry.phaseiilabs.com/v2/
                 
@@ -145,6 +151,8 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 
                 https://docker-registry.phaseiilabs.com/v2/twlphaseii/node-jenkins-docker/manifests/latest
                     # to download and see the metadata for the tag
+
+                curl -H "authorization: Basic ...=" https://docker-registry.phaseiilabs.com/v2/tapp/manifests/0.0.2
 
             # then try to login from cli
             docker login https://docker-registry.phaseiilabs.com
@@ -156,17 +164,39 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
 
             # https://docs.docker.com/engine/reference/commandline/build/
             # execute it in directory https://github.com/stopsopa/kuber/tree/master/001-simple-app/docker/image
-                REGISTRY="docker-registry.phaseiilabs.com"
+                DOCKER_REGISTRY="docker-registry.phaseiilabs.com"
                 APP="tapp"
                 VER="0.0.3"
                 docker build -t $APP:$VER .
-                docker tag $APP:$VER $REGISTRY/$APP:$VER
-                docker push $REGISTRY/$APP:$VER
+                docker tag $APP:$VER $DOCKER_REGISTRY/$APP:$VER
+                docker push $DOCKER_REGISTRY/$APP:$VER
 
                 # TAG="$(docker build -t $APP:$VER . | grep " built " | awk '{print $3}')"
                 # docker history tapp:0.0.1
                 # https://docker-registry.phaseiilabs.com/v2/tapp/tags/list
                 # docker run -it node:10-alpine node -v   # https://hub.docker.com/_/node/
+
+        # install kubectl:
+            https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-using-native-package-management
+
+        # install doctl
+            # from: https://computingforgeeks.com/install-snapd-snap-applications-centos-7/
+            yum -y install epel-release
+            yum -y install yum-plugin-copr
+            yum -y install snapd
+            systemctl enable --now snapd.socket
+
+            # wait here
+            snap find doctl
+
+            snap install doctl
+            snap connect doctl:kube-config
+
+            # close terminal & open terminal to reload bash session
+            doctl auth init # go to the top of this page, from this point it's just the same
+            # there is a seciton that describes process further configuration on mac
+            # generate token and so on...
+
 
     * Using private registry from kubernetes
     -------------------------------
@@ -187,6 +217,32 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
         kubectl get secrets
         kubectl get secret regcred --output=yaml
         kubectl get secret regcred --output="jsonpath={.data.\.dockerconfigjson}" | base64 --decode
+
+    * Garbage collecting Docker Registry
+    -------------------------------
+
+        https://docker-registry.phaseiilabs.com/v2/tapp/tags/list
+        curl -H "authorization: Basic ..." https://docker-registry.phaseiilabs.com/v2/tapp/tags/list
+
+        # https://stackoverflow.com/a/43786939/5560682
+        # I've added -i to grep because I've noticed that not always returned http headers are lowercase
+        # I've also changed method
+        curl -v --silent -H "authorization: Basic ..." -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -X HEAD https://docker-registry.phaseiilabs.com/v2/tapp/manifests/0.0.5 2>&1 | grep -i Docker-Content-Digest | awk '{print ($3)}'
+
+        # https://docs.docker.com/registry/spec/api/#detail
+        curl -v --silent -H "authorization: Basic ..." -H "Accept: application/vnd.docker.distribution.manifest.v2+json" -X DELETE https://docker-registry.phaseiilabs.com/v2/tapp/manifests/sha256:eb3e420f67b79a6e8f58c219ed92d31087b73e325f9a4b684db04094c2d54dfc
+
+        # on registry machine
+        docker exec -it docker-registry sh
+        /bin/registry garbage-collect /etc/docker/registry/config.yml
+
+        #or as a oneliner
+        docker exec -it docker-registry /bin/registry garbage-collect /etc/docker/registry/config.yml
+
+        # read more:
+            https://quaintous.com/2017/05/19/docker-registry-housekeeping/
+            https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/
+                from: g(clean all unused docker images)
 
     * volumes:
     -------------------------------
@@ -225,6 +281,12 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 kubectl apply -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/common.yaml
                 kubectl apply -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/operator.yaml
                 kubectl apply -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/toolbox.yaml
+
+
+                kubectl delete -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/common.yaml
+                kubectl delete -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/operator.yaml
+                kubectl delete -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/toolbox.yaml
+
                     kubectl -n rook-ceph exec -it $(kubectl -n rook-ceph get pod -l "app=rook-ceph-tools" -o jsonpath='{.items[0].metadata.name}') bash
                         # from : https://rook.io/docs/rook/v1.2/ceph-toolbox.html
                     ceph status

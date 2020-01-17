@@ -45,10 +45,10 @@ FROM node:10-alpine
 # Create app directory
 WORKDIR /usr/src/app
 
-COPY server.js .
-
 EXPOSE 80
 
-CMD [ "node", "server.js", "--port", "80", "--info", "--edit" ]
+COPY server.js run.sh ./
+
+CMD [ "/bin/sh", "run.sh" ]
 
 
