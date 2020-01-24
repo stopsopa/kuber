@@ -1,0 +1,45 @@
+{
+    "kind": "Endpoints",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "glusterfs-cluster"
+    },
+    "subsets": [
+        {
+            "addresses": [
+                {
+                    "ip": "178.62.106.76"
+                }
+            ],
+            "ports": [
+                {
+                    "port": 1
+                }
+            ]
+        },
+        {
+            "addresses": [
+                {
+                    "ip": "167.172.54.136"
+                }
+            ],
+            "ports": [
+                {
+                    "port": 1
+                }
+            ]
+        },
+        {
+            "addresses": [
+                {
+                    "ip": "167.172.49.95"
+                }
+            ],
+            "ports": [
+                {
+                    "port": 1
+                }
+            ]
+        }
+    ]
+}

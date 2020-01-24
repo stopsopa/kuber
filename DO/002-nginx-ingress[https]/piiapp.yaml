@@ -17,6 +17,7 @@ spec:
       containers:
         - name: piiapp
           image: 'sdpii/piiapp:0.0.22'
+#          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
 ---
