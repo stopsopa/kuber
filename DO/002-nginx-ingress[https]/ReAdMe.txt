@@ -249,6 +249,12 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
         # problems in DO [table]:
             https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
             [table] https://kubernetes.io/docs/concepts/storage/storage-classes/#provisioner
+            # removing demaged namespace:
+                https://medium.com/@clouddev.guru/how-to-fix-kubernetes-namespace-deleting-stuck-in-terminating-state-5ed75792647e
+                g(How to fix — Kubernetes namespace deleting stuck in Terminating state)
+            # volumen state pending forever:
+                kubectl get PersistentVolumeClaim
+                g(Ceph RBD PVC Pending forever #2922 rook)
 
         # Reasearch:
             # maybe create our own storage?
@@ -282,7 +288,6 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 kubectl apply -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/operator.yaml
                 kubectl apply -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/toolbox.yaml
 
-
                 kubectl delete -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/common.yaml
                 kubectl delete -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/operator.yaml
                 kubectl delete -f https://raw.githubusercontent.com/rook/rook/v1.2.0/cluster/examples/kubernetes/ceph/toolbox.yaml
@@ -294,10 +299,127 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                     ceph df
                     rados df   from: https://rook.io/docs/rook/v1.2/ceph-toolbox.html#running-the-toolbox-in-kubernetes
 
+    GlusterFS
+    ---------------
+        # installing gluster on bare machines:
+
+            from: https://docs.gluster.org/en/latest/Quick-Start-Guide/Quickstart/#step-3-installing-glusterfs
+            it didn't worked so I found this: here: https://lists.gluster.org/pipermail/gluster-users/2016-November/029044.html
+
+                yum install -y centos-release-gluster
+                yum install -y glusterfs-server
+
+                    from: https://wiki.centos.org/SpecialInterestGroup/Storage#User_Documentation
+            # then:
+                service glusterd status
+                service glusterd start
+                systemctl enable glusterd.service
+                service glusterd status
+
+                gluster --version # -> glusterfs 7.2
+
+            # firewall: from: https://docs.gluster.org/en/latest/Quick-Start-Guide/Quickstart/#step-4-configure-the-firewall
+                run on each gluster nodes:
+                    iptables -I INPUT -p all -s xxx.xxx.xxx.xxx -j ACCEPT
+                    iptables -I INPUT -p all -s xxx.xxx.xxx.xxx -j ACCEPT
+                    iptables -I INPUT -p all -s xxx.xxx.xxx.xxx -j ACCEPT
+
+                    iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 24007:24008 -j ACCEPT
+                    iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 49152:49156 -j ACCEPT
+                        # for external connectivity: from: https://gluster.readthedocs.io/en/latest/Administrator%20Guide/Setting%20Up%20Clients/#installing-on-red-hat-package-manager-rpm-distributions
+
+                    iptables -S
+                    iptables --list
+
+cat <<EOF >> /etc/hosts
+xxx.xxx.xxx.xxx glus1
+xxx.xxx.xxx.xxx glus2
+xxx.xxx.xxx.xxx glus3
+EOF
+
+            # GO THROUGH PROCESS OF CONNECTING EVERYTHING TOGETHER:
+                https://docs.gluster.org/en/latest/Quick-Start-Guide/Quickstart/#step-5-configure-the-trusted-pool
+                then run:
+                    gluster peer status
+
+                    gluster pool list
+                    gluster volume info
+
+                    gluster volume profile gv0 start
+                    gluster volume profile gv0 info
+                    gluster volume profile gv0 stop
+
+                    gluster volume status gv0
+                    gluster volume status gv0 mem
+
+                        # from: https://gluster.readthedocs.io/en/latest/Administrator%20Guide/Monitoring%20Workload/#start-profiling
+
+            # try to run on all nodes:
+                mkdir -p /var/glusterfs/gv0
+
+            # create glusterfs server and volume
+                gluster volume create gv0 disperse glus1:/var/glusterfs/gv0 glus2:/var/glusterfs/gv0 glus3:/var/glusterfs/gv0 force
+                    # alternatively you can create replicated volume - not optimal
+                        # gluster volume create gv0 replica 3 glus1:/var/glusterfs/gv0 glus2:/var/glusterfs/gv0 glus3:/var/glusterfs/gv0 force
+
+                    # types of volumes:
+                        https://gluster.readthedocs.io/en/latest/Administrator%20Guide/Setting%20Up%20Volumes/#creating-dispersed-volumes
+                        g(Setting up GlusterFS Volumes Creating Dispersed Volumes)
+
+                # should see:
+                    volume create: gv0: success: please start the volume to access data
+
+                gluster volume start gv0
+                gluster volume info
+
+                # testing volume  from: https://docs.gluster.org/en/latest/Quick-Start-Guide/Quickstart/#step-7-testing-the-glusterfs-volume
+                    mount -t glusterfs glus1:/gv0 /mnt
+                    for i in `seq -w 1 100`; do cp -rp /var/log/messages /mnt/copy-test-$i; done
+                    ls -lA /mnt/copy* | wc -l
+
+                    # testing from other machine:
+                        run on each gluster nodes:
+                            iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 24007:24008 -j ACCEPT
+                            iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 49152:49156 -j ACCEPT
+                                from: https://gluster.readthedocs.io/en/latest/Administrator%20Guide/Setting%20Up%20Clients/#installing-on-red-hat-package-manager-rpm-distributions
+
+                        run on client (another) machine where you would mount glusterfs colume
+                            from: http://mirror.centos.org/centos/7/storage/x86_64/
+                                wget http://mirror.centos.org/centos/7/storage/x86_64/gluster-7/glusterfs-7.1-1.el7.x86_64.rpm
+                                wget http://mirror.centos.org/centos/7/storage/x86_64/gluster-7/glusterfs-fuse-7.1-1.el7.x86_64.rpm
+                                wget http://mirror.centos.org/centos/7/storage/x86_64/gluster-7/glusterfs-rdma-7.1-1.el7.x86_64.rpm
+
+
+                            yum install glusterfs glusterfs-fuse attr -y
+                            mount -t glusterfs glus1:/gv0 /mnt/
+                            mount -t firewall-cmd glus1:/gv0 /mnt/
+                                # in case of problems: vi /var/log/glusterfs/mnt.log
+
+
+                # run on other nodes:
+                    ls -la /var/glusterfs/gv0/copy-test-*
+
+        # using from Kubernetes     from: https://kubernetes.io/docs/concepts/storage/volumes/#glusterfs
+            https://github.com/kubernetes/examples/tree/master/volumes/glusterfs
+
+
 kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
 
 Read more:
     https://www.digitalocean.com/docs/networking/dns/how-to/create-caa-records/
+
+rook ceph glusterfs:
+    https://medium.com/faun/what-is-rook-ceph-storage-integration-on-kubernetes-with-rook-9fa3f3487b90
+    https://blog.kasten.io/posts/rook-ceph-csi-kubernetes-and-k10-an-all-in-one-stateful-experience/?utm_term=&utm_campaign=Dynamic+search&utm_source=adwords&utm_medium=ppc&hsa_acc=3144319558&hsa_cam=6485702571&hsa_grp=78501076235&hsa_ad=381272204052&hsa_src=g&hsa_tgt=dsa-19959388920&hsa_kw=&hsa_mt=b&hsa_net=adwords&hsa_ver=3&gclid=Cj0KCQiApaXxBRDNARIsAGFdaB_L9MszQWis8j1mFuYETjpI-yj_zRFmrdXIRqUCf1CZ1OircrJgzlkaArMREALw_wcB
+    https://hub.docker.com/u/gluster
+        from: https://github.com/gluster/gluster-containers/
+    https://github.com/gluster/gluster-kubernetes
+    http://mirror.centos.org/centos/7/storage/x86_64/gluster-7/
+    https://docs.openshift.com/container-platform/3.9/install_config/storage_examples/gluster_example.html
+
+    https://github.com/gluster/glusterdocs/issues/526
+
+
 
 
 
