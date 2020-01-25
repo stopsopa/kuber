@@ -129,6 +129,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                     tar --strip-components 1 -xzvf node-v* -C /usr/local
                     npx npx-server server.js controllers
                     node server.js --port 8080 & disown
+                    sleep 5
                     curl -I localhost:8080
                     cd ..
 
@@ -401,6 +402,10 @@ EOF
 
         # using from Kubernetes     from: https://kubernetes.io/docs/concepts/storage/volumes/#glusterfs
             https://github.com/kubernetes/examples/tree/master/volumes/glusterfs
+    OpenEBS
+    ---------------
+        # Get all the blockdevices attached in the cluster https://docs.openebs.io/docs/next/ugcstor.html#manual-mode
+            kubectl get blockdevice -n openebs
 
 
 kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
