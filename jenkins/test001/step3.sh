@@ -5,6 +5,16 @@ ps -o command -p $$
 
 env
 
+_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P )"
+
+source "$_DIR/../../.env"
+
+echo ">>$ENVVARIABLE<<"
+
+docker -v
+
+docker ps
+
 # example output:
 #+ /bin/bash jenkins/step3.sh
 #SHELL: /bin/bash, shell: , ARGV[0]: jenkins/step3.sh, PS1: , prompt:
