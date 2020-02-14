@@ -19,6 +19,8 @@ id
 
 pwd
 
+kubectl get node
+
 # example output:
 #+ /bin/bash jenkins/step3.sh
 #SHELL: /bin/bash, shell: , ARGV[0]: jenkins/step3.sh, PS1: , prompt:
@@ -56,4 +58,10 @@ pwd
 #BUILD_NUMBER=11
 #HUDSON_COOKIE=f8f7d8cd-d938-4ae4-bb75-eca86d4e1bb9
 #_=/usr/bin/env
+#>>envvar value<<
+#Docker version 19.03.5, build 633a0ea
+#CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                   NAMES
+#73d1d2849d03        image_ownregistry   "/entrypoint.sh /etc…"   2 weeks ago         Up 2 weeks          0.0.0.0:443->5000/tcp   docker-registry
+#uid=0(root) gid=0(root) groups=0(root) context=system_u:system_r:unconfined_service_t:s0
+#/root/.jenkins/workspace/jen
 
