@@ -15,6 +15,10 @@ docker -v
 
 docker ps
 
+id
+
+pwd
+
 # example output:
 #+ /bin/bash jenkins/step3.sh
 #SHELL: /bin/bash, shell: , ARGV[0]: jenkins/step3.sh, PS1: , prompt:
