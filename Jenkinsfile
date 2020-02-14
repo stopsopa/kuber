@@ -11,7 +11,7 @@ pipeline {
         }
         stage('Step 2') {
             steps{
-                sh "/bin/bash jenkins/step2.sh"
+                sh "/bin/sh jenkins/step2.sh"
                 // sh "docker rmi $registry:latest"
             }
         }
