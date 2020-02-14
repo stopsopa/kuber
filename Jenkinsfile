@@ -11,7 +11,7 @@ pipeline {
         }
         stage('Step 2') {
             steps{
-                sh "echo 'test 2...'"
+                bash "echo 'test 2...'"
                 // sh "docker rmi $registry:latest"
             }
         }
