@@ -8,12 +8,23 @@ services:
       dockerfile: Dockerfile
     container_name: docker-registry
     volumes:
-      # - registry:/var/lib/registry
-      - /etc/letsencrypt:/etc/letsencrypt
+      # - registry:/var/lib/registry  # always commented
+
+
+
+
+
+#      - /etc/letsencrypt:/etc/letsencrypt   # commented with switching from 443 to 80
+
+
+
       - /var/lib/docker/registry:/var/lib/registry
       - ~/.htpasswd:/htpasswd
     ports:
-      - "443:5000"
+#      - "443:5000"
+        # since we handled jenkis with https we had to add nginx
+        # having nginx we will use certificate on nginx to provide https to docker registry
+      - "127.0.0.1:8090:5000"
     restart: unless-stopped
     env_file:
       - .env

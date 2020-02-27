@@ -1,8 +1,8 @@
 
+source ~/.bash_profile
+
 set -x
 set -e
-
-source ~/.bash_profile
 
 echo "SHELL: $SHELL, shell: $shell, ARGV[0]: $0, PS1: $PS1, prompt: $prompt"
 

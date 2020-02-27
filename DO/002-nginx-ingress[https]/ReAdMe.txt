@@ -37,7 +37,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
 
         WARNING: we have updated version in link
 
-        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.1/deploy/static/mandatory.yaml
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.27.1/deploy/static/mandatory.yaml
 
             from: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes#step-2-%E2%80%94-setting-up-the-kubernetes-nginx-ingress-controller
 
@@ -45,6 +45,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
     -------------------------------
         doctl compute certificate list
         doctl compute certificate create --name certv003 --type lets_encrypt --dns-names httptest.phaseiilabs.com,kuber.phaseiilabs.com,kuber2.phaseiilabs.com,lhhub.phaseiilabs.com,nossl.phaseiilabs.com
+        doctl compute certificate create --name certv005 --type lets_encrypt --dns-names kuber.phaseiilabs.com,www.kuber.phaseiilabs.com,lhhub.phaseiilabs.com,www.lhhub.phaseiilabs.com,lh.kube.phaseiilabs.com,www.lh.kube.phaseiilabs.com
         doctl compute certificate get eebf2fd0-8331-4432-8d37-87ce0631869a
 
         kubectl get -f loadbalancer.yaml -o jsonpath="{.metadata}"
@@ -160,7 +161,6 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
             docker login https://docker-registry.phaseiilabs.com --username=yourhubusername --password=yourpassword
             cat ~/.docker/config.json
 
-            docker login https://docker-registry.phaseiilabs.com
             vi ~/.docker/config.json <--- the creds will go here
 
             # https://docs.docker.com/engine/reference/commandline/build/
@@ -223,7 +223,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
     -------------------------------
 
         https://docker-registry.phaseiilabs.com/v2/tapp/tags/list
-        curl -H "authorization: Basic ..." https://docker-registry.phaseiilabs.com/v2/tapp/tags/list
+        curl -H "authorization: Basic ..." https://docker-registry.phaseiilabs.com/v2/tatapppp/tags/list
 
         # https://stackoverflow.com/a/43786939/5560682
         # I've added -i to grep because I've noticed that not always returned http headers are lowercase
@@ -404,6 +404,9 @@ EOF
             https://github.com/kubernetes/examples/tree/master/volumes/glusterfs
     OpenEBS
     ---------------
+        # installation:
+            kubectl apply -f https://openebs.github.io/charts/openebs-operator-1.6.0.yaml
+                from: https://docs.openebs.io/docs/next/installation.html#installation-through-kubectl
         # Get all the blockdevices attached in the cluster https://docs.openebs.io/docs/next/ugcstor.html#manual-mode
             kubectl get blockdevice -n openebs
 

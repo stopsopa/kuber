@@ -1,0 +1,38 @@
+# https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#examples
+# https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    test: startup
+  name: startup-exec
+spec:
+  containers:
+    - name: startup
+      image: k8s.gcr.io/busybox
+      args:
+        - /bin/sh
+        - -c
+        - sleep 15; touch /tmp/healthy; sleep 600
+      startupProbe:
+        # its beta feature :/ https://github.com/ubuntu/microk8s/issues/770#issuecomment-549093446
+        # https://kubernetes.io/docs/reference/command-line-tools-reference/feature-gates/#feature-gates-for-alpha-or-beta-features
+        # https://www.digitalocean.com/docs/kubernetes/
+          # Limitations section: The master configuration is managed by DigitalOcean. You cannot modify the master files, feature gates, or admission ...
+
+        # do update to k8s 1.17
+        # k8s release of 1.16.2 https://github.com/kubernetes/kubernetes/releases/tag/v1.16.2
+          # 15 Oct 2019
+        # DO update to 1.16.2 https://www.digitalocean.com/docs/kubernetes/changelog/
+          # 1.16.2-do.3 (2020-01-22)
+        exec:
+          command:
+            - cat
+            - /tmp/healthy
+        periodSeconds: 3 # more about these: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
+        failureThreshold: 2 # how many times endpoint have to fail before kubernetes will start restart procedure
+  terminationGracePeriodSeconds: 3 # how long to wait for SIGKILL handler to finish before pod will be killed by k8s
+
+# to see how it behaves:
+# kubectl describe pod startup-exec
+# watch kubectl get po -o wide
