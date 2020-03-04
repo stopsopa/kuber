@@ -61,6 +61,38 @@ sudo systemctl start jen
 sudo systemctl enable jen
 
 
+===== bitbucket integration ===== vvv
+Ussue installing plugin:
+    HTTP ERROR 403
+    Problem accessing /pluginManager/install. Reason:
+    No valid crumb was included in the request
+    resolution:
+        https://github.com/spinnaker/spinnaker/issues/2067#issuecomment-407708770
+
+Add plugins:
+    https://imgur.com/3bcpv26
+
+        Bitbucket Build Status Notifier Plugin
+        This plugin is a Bitbucket build status notifier that can publish your build status to Bitbucket Cloud.
+        1.4.1
+
+        Bitbucket Plugin
+        Integrates with BitBucket
+        1.1.11
+add !!PRIVATE SSH KEY!! https://i.imgur.com/xx6l8D9.png
+
+
+
+register webhook on bitbucket:
+https://mohamicorp.atlassian.net/wiki/spaces/DOC/pages/381419546/Configuring+Webhook+To+Jenkins+for+Bitbucket+Bitbucket+Branch+Source+Plugin#ConfiguringWebhookToJenkinsforBitbucket(BitbucketBranchSourcePlugin)-ConfiguringonaperRepositoryBasis
+g(Configuring Webhook To Jenkins for Bitbucket (Bitbucket Branch Source Plugin))
+    add under "URL" field: https://jenkins.docker-registry.ourserver.com/bitbucket-hook/
+
+testing triggering:
+    systemctl status jen.service -l
+===== bitbucket integration ===== ^^^
+
+
 
 
 

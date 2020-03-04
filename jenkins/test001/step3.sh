@@ -1,5 +1,5 @@
 
-source ~/.bash_profile
+source ~/.bash_profile 1>> log.log 2>> /dev/null
 
 set -x
 set -e
