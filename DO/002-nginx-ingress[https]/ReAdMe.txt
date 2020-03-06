@@ -37,15 +37,14 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
 
         WARNING: we have updated version in link
 
-        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.27.1/deploy/static/mandatory.yaml
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
 
             from: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes#step-2-%E2%80%94-setting-up-the-kubernetes-nginx-ingress-controller
 
     ** create https certificate: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
     -------------------------------
         doctl compute certificate list
-        doctl compute certificate create --name certv003 --type lets_encrypt --dns-names httptest.phaseiilabs.com,kuber.phaseiilabs.com,kuber2.phaseiilabs.com,lhhub.phaseiilabs.com,nossl.phaseiilabs.com
-        doctl compute certificate create --name certv005 --type lets_encrypt --dns-names kuber.phaseiilabs.com,www.kuber.phaseiilabs.com,lhhub.phaseiilabs.com,www.lhhub.phaseiilabs.com,lh.kube.phaseiilabs.com,www.lh.kube.phaseiilabs.com
+        doctl compute certificate create --name certv001 --type lets_encrypt --dns-names aml.kub.phaseiilabs.com,www.aml.kub.phaseiilabs.com,lh.kub.phaseiilabs.com,www.lh.kub.phaseiilabs.com
         doctl compute certificate get eebf2fd0-8331-4432-8d37-87ce0631869a
 
         kubectl get -f loadbalancer.yaml -o jsonpath="{.metadata}"
@@ -55,7 +54,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
 
         WARNING: we have updated version in link
 
-        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.26.1/deploy/static/provider/cloud-generic.yaml
+        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/provider/cloud-generic.yaml
             # WARNING: for https this is not enough, see example file "loadbalancer.yaml" in this folder
             # change value under kay service.beta.kubernetes.io/do-loadbalancer-certificate-id for generated certificate id
 
