@@ -409,6 +409,7 @@ EOF
                 from: https://docs.openebs.io/docs/next/installation.html#installation-through-kubectl
         # Get all the blockdevices attached in the cluster https://docs.openebs.io/docs/next/ugcstor.html#manual-mode
             kubectl get blockdevice -n openebs
+            kubectl describe blockdevice blockdevice-3457b40abd4d04dbeaa4ae2fdaf3b4a2 -n openebs
 
 
 kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt

@@ -1,8 +1,8 @@
 
 source ~/.bash_profile 1>> log.log 2>> /dev/null
 
-#set -x 
-#set -e
+set -x
+set -e
 
 echo "SHELL: $SHELL, shell: $shell, ARGV[0]: $0, PS1: $PS1, prompt: $prompt"
 
