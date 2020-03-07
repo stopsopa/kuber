@@ -422,6 +422,13 @@ EOF
             step 3:
                 follow instructions in order:
                     https://github.com/stopsopa/kuber/tree/master/DO/openebsexampleyamlfiles
+                WARNING: after executing:
+                    helm install stable/nfs-server-provisioner --namespace=nfs --name=nfs-helm-install-name --set=persistence.enabled=true,persistence.storageClass=openebs-sc-statefulset,persistence.size=250Gi,storageClass.name=nfs-sc-for-cluster,storageClass.provisionerName=openebs.io/nfs
+                        better wait until pod will rise (should take around 2 minutes - roughly):
+                            kubectl get pod -n nfs
+                        to debug run:
+                            kubectl describe pod nfs-helm-install-name-nfs-server-provisioner-0 -n nfs
+
 
         # Get all the blockdevices attached in the cluster https://docs.openebs.io/docs/next/ugcstor.html#manual-mode
             kubectl get blockdevice -n openebs
