@@ -1,4 +1,5 @@
 # create kubernetes cluster version: 1.16.2-do.1 (latest)
+# create kubernetes cluster version: 1.16.6-do.0 (latest) 2020-03-07
 
 # cli - installing cli on dev machine and "talk" to kubernetes remotely
 
@@ -26,6 +27,10 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
     ** helm
     -------------------------------
         https://www.digitalocean.com/community/tutorials/how-to-install-software-on-kubernetes-clusters-with-the-helm-package-manager#step-1-%E2%80%94-installing-helm
+        helm version
+            (latest) 2020-03-07
+                Client: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
+                Server: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
 
     ** install tiller
     -------------------------------
@@ -35,9 +40,10 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
     ** Installing Kubernetes Nginx Ingress Controller in the cluster:
     -------------------------------
 
-        WARNING: we have updated version in link
-
-        kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
+        WARNING: CHECK LATEST: https://github.com/kubernetes/ingress-nginx/releases
+            also here: https://kubernetes.github.io/ingress-nginx/deploy/#prerequisite-generic-deployment-command
+            kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
+                0.30.0 (latest) 2020-03-07
 
             from: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes#step-2-%E2%80%94-setting-up-the-kubernetes-nginx-ingress-controller
 
@@ -404,8 +410,18 @@ EOF
     OpenEBS
     ---------------
         # installation:
-            kubectl apply -f https://openebs.github.io/charts/openebs-operator-1.6.0.yaml
-                from: https://docs.openebs.io/docs/next/installation.html#installation-through-kubectl
+            step 1:
+                kubectl apply -f https://openebs.github.io/charts/openebs-operator-1.7.0.yaml
+                    from: https://docs.openebs.io/docs/next/installation.html#installation-through-kubectl
+            step 2 (verify):
+                from: https://docs.openebs.io/docs/next/installation.html#verifying-openebs-installation
+                    kubectl get pods -n openebs
+                    kubectl get sc
+                    kubectl get blockdevice -n openebs
+                    kubectl get sp
+            step 3:
+                create
+
         # Get all the blockdevices attached in the cluster https://docs.openebs.io/docs/next/ugcstor.html#manual-mode
             kubectl get blockdevice -n openebs
             kubectl describe blockdevice blockdevice-3457b40abd4d04dbeaa4ae2fdaf3b4a2 -n openebs

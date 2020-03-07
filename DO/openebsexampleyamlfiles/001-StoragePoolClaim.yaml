@@ -1,0 +1,52 @@
+# https://docs.openebs.io/docs/next/rwm.html#setting-up-a-single-nfs-server
+#Use the following YAMLs to create a cStor Storage Pool.
+apiVersion: openebs.io/v1alpha1
+kind: StoragePoolClaim
+metadata:
+  name: cstor-disk-pool
+  annotations:
+    cas.openebs.io/config: |
+      - name: PoolResourceRequests
+        value: |-
+            memory: 2G
+      - name: PoolResourceLimits
+        value: |-
+            memory: 4G
+spec:
+  name: cstor-disk-pool
+  type: disk
+  poolSpec:
+#    poolType: mirrored
+    poolType: striped
+  blockDevices:
+    blockDeviceList:
+      - blockdevice-425d00a670fc4ae01b5a4e367293478d
+      - blockdevice-e2cce227de770cd37f832a6a248adc1a
+      - blockdevice-e61ddd0261a58020e2875e321b12a4a8
+---
+
+# kubectl get blockdevice -n openebs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

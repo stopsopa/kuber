@@ -1,0 +1,93 @@
+
+https://docs.openebs.io/docs/next/rwm.html#setting-up-a-single-nfs-server
+helm install stable/nfs-server-provisioner --namespace=nfs --name=nfs-helm-install-name --set=persistence.enabled=true,persistence.storageClass=openebs-sc-statefulset,persistence.size=200Gi,storageClass.name=nfs-sc-for-cluster,storageClass.provisionerName=openebs.io/nfs
+
+helm install stable/nfs-server-provisioner --name=nfs-helm-install-name --set=persistence.enabled=true,persistence.storageClass=openebs-sc-statefulset,persistence.size=200Gi,storageClass.name=nfs-sc-for-cluster,storageClass.provisionerName=openebs.io/nfs
+
+                                                                                                                                                                                                                ^
+                                                                                                                                                                                                                |-- new storeage class name that will be create
+
+
+TO DEBUG:
+    kubectl get disk
+    kubectl get csp
+    kubectl get spc
+
+    kubectl get sc
+    kubectl describe sc nfs-sc-for-cluster
+
+    Uninstall OpenEBS Gracefully
+        https://docs.openebs.io/docs/next/uninstall.html
+            hint use --all-namespaces
+            kubectl get pods --all-namespaces
+        helm delete nfs-helm-install-name --purge
+        kubectl delete ns openebs
+        kubectl delete jobs -l openebs.io/cas-type=jiva -n openebs
+        kubectl delete pod hub-lh-5d9595d864-88b8h --grace-period=0 --force
+
+    Issues:
+        https://github.com/kubernetes/kubernetes/issues/69697
+        https://github.com/openebs/openebs/issues/2374#issuecomment-460690645
+
+
+# example output
+$ helm install stable/nfs-server-provisioner --namespace=nfs --name=nfs-helm-install-name --set=persistence.enabled=true,persistence.storageClass=openebs-sc-statefulset,persistence.size=22Gi,storageClass.name=sc-hublh,storageClass.provisionerName=openebs.io/nfs
+NAME:   nfs-helm-install-name
+LAST DEPLOYED: Mon Jan 27 10:24:31 2020
+NAMESPACE: nfs
+STATUS: DEPLOYED
+
+RESOURCES:
+==> v1/ClusterRole
+NAME                                          AGE
+nfs-helm-install-name-nfs-server-provisioner  1s
+
+==> v1/ClusterRoleBinding
+NAME                                          AGE
+nfs-helm-install-name-nfs-server-provisioner  1s
+
+==> v1/Pod(related)
+NAME                                            AGE
+nfs-helm-install-name-nfs-server-provisioner-0  0s
+
+==> v1/Service
+NAME                                          AGE
+nfs-helm-install-name-nfs-server-provisioner  1s
+
+==> v1/ServiceAccount
+NAME                                          AGE
+nfs-helm-install-name-nfs-server-provisioner  1s
+
+==> v1/StatefulSet
+NAME                                          AGE
+nfs-helm-install-name-nfs-server-provisioner  1s
+
+==> v1/StorageClass
+NAME      AGE
+sc-hublh  1s
+
+
+NOTES:
+The NFS Provisioner service has now been installed.
+
+A storage class named 'sc-hublh' has now been created
+and is available to provision dynamic volumes.
+
+You can use this storageclass by creating a `PersistentVolumeClaim` with the
+correct storageClassName attribute. For example:
+
+    ---
+    kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: test-dynamic-volume-claim
+    spec:
+      storageClassName: "sc-hublh"
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 100Mi
+
+
+sd@Szymons-MacBook-Pro-749:~$
