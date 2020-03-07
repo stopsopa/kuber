@@ -409,17 +409,20 @@ EOF
             https://github.com/kubernetes/examples/tree/master/volumes/glusterfs
     OpenEBS
     ---------------
-        # installation:
+        # installation/configuration (DigitalOcean):
             step 1:
                 kubectl apply -f https://openebs.github.io/charts/openebs-operator-1.7.0.yaml
                     from: https://docs.openebs.io/docs/next/installation.html#installation-through-kubectl
-            step 2 (verify):
+            step 2:
+                add volume to each cluster, don't mount those voulumes, let openebs to mount and format them:
+                    https://i.imgur.com/TxM7sHs.png
+            step 3 (verify):
                 from: https://docs.openebs.io/docs/next/installation.html#verifying-openebs-installation
                     kubectl get pods -n openebs
                     kubectl get sc
                     kubectl get blockdevice -n openebs
                     kubectl get sp
-            step 3:
+            step 4:
                 follow instructions in order:
                     https://github.com/stopsopa/kuber/tree/master/DO/openebsexampleyamlfiles
                 WARNING: after executing:
