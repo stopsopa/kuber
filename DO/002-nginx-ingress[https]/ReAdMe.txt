@@ -420,7 +420,8 @@ EOF
                     kubectl get blockdevice -n openebs
                     kubectl get sp
             step 3:
-                create
+                follow instructions in order:
+                    https://github.com/stopsopa/kuber/tree/master/DO/openebsexampleyamlfiles
 
         # Get all the blockdevices attached in the cluster https://docs.openebs.io/docs/next/ugcstor.html#manual-mode
             kubectl get blockdevice -n openebs
