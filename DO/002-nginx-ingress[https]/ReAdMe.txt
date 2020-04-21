@@ -1,6 +1,9 @@
 # create kubernetes cluster version: 1.16.2-do.1 (latest)
 # create kubernetes cluster version: 1.16.6-do.0 (latest) 2020-03-07
 
+====== create cluster and
+    IMPORTANT: RESET ROOT PASSOWRD TO GET ROOT ACCESS TO MACHINE - just in case
+
 # cli - installing cli on dev machine and "talk" to kubernetes remotely
 
     cli:
@@ -31,6 +34,8 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
             (latest) 2020-03-07
                 Client: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
                 Server: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
+
+        check latest: https://github.com/helm/helm/releases
 
     ** install tiller
     -------------------------------
@@ -436,6 +441,12 @@ EOF
         # Get all the blockdevices attached in the cluster https://docs.openebs.io/docs/next/ugcstor.html#manual-mode
             kubectl get blockdevice -n openebs
             kubectl describe blockdevice blockdevice-3457b40abd4d04dbeaa4ae2fdaf3b4a2 -n openebs
+
+    NFS server and DO
+    ---------
+    https://www.digitalocean.com/community/tutorials/how-to-set-up-readwritemany-rwx-persistent-volumes-with-nfs-on-digitalocean-kubernetes
+        g(How To Set Up ReadWriteMany (RWX) Persistent Volumes with NFS on DigitalOcean Kubernetes)
+            helm install --name nfs-server-20 stable/nfs-server-provisioner --set=persistence.enabled=true,persistence.storageClass=do-block-storage,persistence.size=20Gi,storageClass.name=nfs-20
 
 
 kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
