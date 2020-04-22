@@ -446,7 +446,25 @@ EOF
     ---------
     https://www.digitalocean.com/community/tutorials/how-to-set-up-readwritemany-rwx-persistent-volumes-with-nfs-on-digitalocean-kubernetes
         g(How To Set Up ReadWriteMany (RWX) Persistent Volumes with NFS on DigitalOcean Kubernetes)
-            helm install --name nfs-server-20 stable/nfs-server-provisioner --set=persistence.enabled=true,persistence.storageClass=do-block-storage,persistence.size=20Gi,storageClass.name=nfs-20
+
+            Instead of using:
+                helm search repo stable
+                use:
+                helm search stable | grep nfs-server-provisioner
+
+            Instead of using:
+                helm install nfs-server           stable/nfs-server-provisioner --set persistence.enabled=true,persistence.storageClass=do-block-storage,persistence.size=200Gi
+                use:
+                helm install --name nfs-server-20 stable/nfs-server-provisioner --set=persistence.enabled=true,persistence.storageClass=do-block-storage,persistence.size=20Gi,storageClass.name=nfs-20
+
+        If reattaching nfs volume is needed use "recycle" button in the k8s cluster.
+            This (as we have observed) will automatically reattach volume to different node (even across different poll of nodes).
+            It will not attach this volume back to newly created node that was meant to replace recycled node.
+
+        Remember sometimes to run one of those, to manually poke provisioner:
+            kubectl delete pod nfs-server-20-nfs-server-provisioner-0
+            kubectl delete pod nfs-server-20-nfs-server-provisioner-0  --grace-period=0 --force
+                But when you using previously mentioned "recycle" method you shouldn't need to use this.
 
 
 kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
