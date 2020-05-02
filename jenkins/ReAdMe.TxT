@@ -34,6 +34,7 @@
                 /root/.jenkins/secrets/initialAdminPassword
                 https://i.imgur.com/TMrGNLs.png
 
+
     # register service: https://www.linode.com/docs/quick-answers/linux/start-service-at-boot/
 
 cat <<EOF > /lib/systemd/system/jen.service
@@ -79,6 +80,14 @@ Add plugins:
         Bitbucket Plugin
         Integrates with BitBucket
         1.1.11
+
+        Throttle Concurrent Builds
+        2.0.2
+            how to use:
+                https://i.imgur.com/w3viJbf.png
+
+            Warning: use in pippeline mode: https://github.com/jenkinsci/throttle-concurrent-builds-plugin
+
 add !!PRIVATE SSH KEY!! https://i.imgur.com/xx6l8D9.png
 
 

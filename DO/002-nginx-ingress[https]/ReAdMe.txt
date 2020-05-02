@@ -45,12 +45,53 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
     ** Installing Kubernetes Nginx Ingress Controller in the cluster:
     -------------------------------
 
+        from: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes#step-2-%E2%80%94-setting-up-the-kubernetes-nginx-ingress-controller
+
         WARNING: CHECK LATEST: https://github.com/kubernetes/ingress-nginx/releases
             also here: https://kubernetes.github.io/ingress-nginx/deploy/#prerequisite-generic-deployment-command
-            kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
+
+            # kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
                 0.30.0 (latest) 2020-03-07
 
-            from: https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nginx-ingress-with-cert-manager-on-digitalocean-kubernetes#step-2-%E2%80%94-setting-up-the-kubernetes-nginx-ingress-controller
+            wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
+
+            WARNING: change:
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nginx-configuration
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+
+---
+to:
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nginx-configuration
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+data:
+  use-forwarded-headers: "true"
+  compute-full-forwarded-for: "true"
+  use-proxy-protocol: "true"
+---
+
+        The key thing here is to add
+            service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
+                more about this annotation: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/#proxy-protocol
+            to loadbalancer.yaml also
+            it is described more in details here:
+                https://www.digitalocean.com/community/questions/how-to-set-up-nginx-ingress-for-load-balancers-with-proxy-protocol-support?answer=50244
+
 
     ** create https certificate: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
     -------------------------------
@@ -59,6 +100,20 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
         doctl compute certificate get eebf2fd0-8331-4432-8d37-87ce0631869a
 
         kubectl get -f loadbalancer.yaml -o jsonpath="{.metadata}"
+
+    * (NOT NECESSARY) Creating loadbalancer in DO (SINGLE CERTIFICATE FOR DIFFERENT DOMAINS - OLD APPROACH):
+    -------------------------------
+
+        WARNING: we have updated version in link
+            https://github.com/jetstack/cert-manager/releases
+
+            add here load balancer
+
+        kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.14.2/cert-manager.yaml
+
+        And follow: https://cert-manager.io/next-docs/tutorials/acme/ingress/#step-6-configure-let-s-encrypt-issuer
+
+
 
     ** Creating loadbalancer in DO:
     -------------------------------
@@ -81,6 +136,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 https://www.digitalocean.com/docs/kubernetes/how-to/add-load-balancers/
                 kubectl --kubeconfig=loadbalancer.yaml get services
                 kubectl describe svc kube-test-loadbalancer
+
 
     * (NOT NECESSARY) installing cert-manager from:
     -------------------------------
@@ -465,6 +521,13 @@ EOF
             kubectl delete pod nfs-server-20-nfs-server-provisioner-0
             kubectl delete pod nfs-server-20-nfs-server-provisioner-0  --grace-period=0 --force
                 But when you using previously mentioned "recycle" method you shouldn't need to use this.
+
+    If there is need to resize storageClass then just resize volume through DO admin panel and then follow:
+        https://kubernetes.io/blog/2018/07/12/resizing-persistent-volumes-using-kubernetes/
+        g(Resizing Persistent Volumes using Kubernetes)
+
+    Other tricks with NFS:
+        https://code.vmware.com/samples/4552/nfs-server-provisioner-with-rwx-pvc-support-for-scaling-web-front-ends#code
 
 
 kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
