@@ -80,8 +80,8 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 data:
-  use-forwarded-headers: "true"
-  compute-full-forwarded-for: "true"
+#  use-forwarded-headers: "true" # don't turn this one on as it is in the article, it breaks let's encrypt authentication process
+#  compute-full-forwarded-for: "true" # don't turn this one on as it is in the article, it breaks let's encrypt authentication process
   use-proxy-protocol: "true"
 ---
 
