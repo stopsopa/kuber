@@ -80,8 +80,8 @@ metadata:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx
 data:
-#  use-forwarded-headers: "true" # don't turn this one on as it is in the article, it breaks let's encrypt authentication process
-#  compute-full-forwarded-for: "true" # don't turn this one on as it is in the article, it breaks let's encrypt authentication process
+  use-forwarded-headers: "true"
+  compute-full-forwarded-for: "true"
   use-proxy-protocol: "true"
 ---
 
@@ -310,6 +310,21 @@ data:
             https://quaintous.com/2017/05/19/docker-registry-housekeeping/
             https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/
                 from: g(clean all unused docker images)
+
+        # install go: from: https://linuxize.com/post/how-to-install-go-on-centos-7/
+            wget https://dl.google.com/go/go1.13.linux-amd64.tar.gz
+            sudo tar -C /usr/local -xzf go1.13.linux-amd64.tar.gz
+
+            add to ~/.bash_profile to PATH:
+                /usr/local/go/bin
+                like:
+                    PATH=$PATH:$HOME/bin:/usr/local/go/bin
+                source ~/.bash_profile
+
+            add also to ~/.bash_profile
+                export GOPATH=$HOME/go
+                    from: https://github.com/golang/go/wiki/SettingGOPATH#bash
+
 
     * volumes:
     -------------------------------
