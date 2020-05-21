@@ -325,6 +325,32 @@ data:
                 export GOPATH=$HOME/go
                     from: https://github.com/golang/go/wiki/SettingGOPATH#bash
 
+        remove images using gui: https://github.com/stopsopa/docker-registry-ui
+        then go to the:
+            docker exec -it docker-registry /bin/registry garbage-collect --dry-run /etc/docker/registry/config.yml
+
+        To clean local old images https://docs.docker.com/config/pruning/
+            # remove older thatn 20 dayse (20 * 24 = 480)
+            docker image prune -a --force --filter "until=480h"
+
+add it to cron:
+mkdir -p /home/jenkins/.jenkins/workspace/____clear
+cd /home/jenkins/.jenkins/workspace/____clear
+cat <<EOF > run.sh
+cd /home/jenkins/.jenkins/workspace/____clear
+date +"%Y-%m-%d %H:%M:%S" >> log.log
+
+echo -e "\nclear docker:\n" >> log.log
+docker image prune -a --force --filter "until=480h" >> log.log
+echo -e "\nclear docker-registry:\n" >> log.log
+docker exec  docker-registry /bin/registry garbage-collect --dry-run /etc/docker/registry/config.yml | tail -n 3 >> log.log
+echo -e "\n\n\n\n" >> log.log
+EOF
+
+echo "0 * * * * root /bin/bash /home/jenkins/.jenkins/workspace/____clear/run.sh" >> /etc/crontab
+
+
+
 
     * volumes:
     -------------------------------

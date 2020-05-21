@@ -32,7 +32,7 @@ $CMD;
 htpasswd -cBb ~/.htpasswd ${PASSWD_USER} ${PASSWD_PASSWORD}
 
 echo "Running docker registry image"
-cd ./image/ && docker-compose up -d
+(cd ./image/ && docker-compose up -d)
 
 
 cat << EOF
