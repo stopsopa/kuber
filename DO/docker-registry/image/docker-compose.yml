@@ -18,7 +18,8 @@ services:
       - /var/lib/docker/registry:/var/lib/registry
       - ~/.htpasswd:/htpasswd
       
-      - ./registry-config/config.yml:/etc/docker/registry/config.yml:ro
+      # Not needed anymore as we have config already in image/ folder and injected in Dockerfile
+      # - ./registry-config/config.yml:/etc/docker/registry/config.yml:ro
     ports:
       #      - "443:5000"
       # since we handled jenkis with https we had to add nginx
