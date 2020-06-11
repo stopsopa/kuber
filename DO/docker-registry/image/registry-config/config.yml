@@ -1,17 +1,14 @@
 version: 0.1
 log:
-  fields:
+  fields: 
     service: registry
 storage:
-  cache:
+  cache:  
     blobdescriptor: inmemory
-
-  # https://github.com/docker/distribution/issues/1326
-  delete: # https://docs.docker.com/registry/configuration/#delete
-    enabled: true
-
   filesystem:
     rootdirectory: /var/lib/registry
+  delete: 
+    enabled: true
 http:
   addr: :5000
   headers:

@@ -21,6 +21,9 @@ services:
 
 
       - ~/.htpasswd:/htpasswd
+      
+      # Not needed anymore as we have config already in image/ folder and injected in Dockerfile
+      # - ./registry-config/config.yml:/etc/docker/registry/config.yml:ro
     ports:
       #      - "443:5000"
       # since we handled jenkis with https we had to add nginx
@@ -29,6 +32,26 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    networks:
+      - registry-ui-net
+
+  ownregistry-ui:
+    image: joxit/docker-registry-ui:static
+    restart: unless-stopped
+    ports:  
+      - 8181:80 
+    environment:
+      - REGISTRY_TITLE=My Private Docker Registry
+      - REGISTRY_URL=https://ownregistry:5000
+      - DELETE_IMAGES=true
+    depends_on:
+      - ownregistry
+    container_name: docker-registry-ui
+    networks:
+      - registry-ui-net
 
 volumes:
   registry:
+
+networks:
+  registry-ui-net:
