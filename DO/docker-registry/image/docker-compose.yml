@@ -15,7 +15,11 @@ services:
 
 
 
-      - /var/lib/docker/registry:/var/lib/registry
+      - /mnt/docker_registry:/var/lib/registry # do volume
+#      - /var/lib/docker/registry:/var/lib/registry
+
+
+
       - ~/.htpasswd:/htpasswd
     ports:
       #      - "443:5000"
