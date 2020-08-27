@@ -50,47 +50,54 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
         WARNING: CHECK LATEST: https://github.com/kubernetes/ingress-nginx/releases
             also here: https://kubernetes.github.io/ingress-nginx/deploy/#prerequisite-generic-deployment-command
 
+            LEGACY:
             # kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
                 0.30.0 (latest) 2020-03-07
+                wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.34.1/deploy/static/mandatory.yaml
 
-            wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.30.0/deploy/static/mandatory.yaml
+            LATEST !!!!  THEY HAVE CHANGED PROCESS OF INSTALATION, FROM NOW ON IT'S DIFFERENT ON DIFFERENT CLOUD PROVIDERS: https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean
+            # kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/do/deploy.yaml
+                0.34.1 (latest) 2020-08-27
+                wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/do/deploy.yaml
 
-            WARNING: change:
----
+            WARNING: change: (it was valid for version 0.30.0, now let's try to use as is, without those modification below)
+            WARNING: change: (it was valid for version 0.30.0, now let's try to use as is, without those modification below)
+            WARNING: change: (it was valid for version 0.30.0, now let's try to use as is, without those modification below)
+                                                                                        ---
 
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: nginx-configuration
-  namespace: ingress-nginx
-  labels:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/part-of: ingress-nginx
+                                                                                        kind: ConfigMap
+                                                                                        apiVersion: v1
+                                                                                        metadata:
+                                                                                          name: nginx-configuration
+                                                                                          namespace: ingress-nginx
+                                                                                          labels:
+                                                                                            app.kubernetes.io/name: ingress-nginx
+                                                                                            app.kubernetes.io/part-of: ingress-nginx
 
----
-to:
----
+                                                                                        ---
+                                                                                        to:
+                                                                                        ---
 
-kind: ConfigMap
-apiVersion: v1
-metadata:
-  name: nginx-configuration
-  namespace: ingress-nginx
-  labels:
-    app.kubernetes.io/name: ingress-nginx
-    app.kubernetes.io/part-of: ingress-nginx
-data:
-  use-forwarded-headers: "true"
-  compute-full-forwarded-for: "true"
-  use-proxy-protocol: "true"
----
+                                                                                        kind: ConfigMap
+                                                                                        apiVersion: v1
+                                                                                        metadata:
+                                                                                          name: nginx-configuration
+                                                                                          namespace: ingress-nginx
+                                                                                          labels:
+                                                                                            app.kubernetes.io/name: ingress-nginx
+                                                                                            app.kubernetes.io/part-of: ingress-nginx
+                                                                                        data:
+                                                                                          use-forwarded-headers: "true"
+                                                                                          compute-full-forwarded-for: "true"
+                                                                                          use-proxy-protocol: "true"
+                                                                                        ---
 
-        The key thing here is to add
-            service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
-                more about this annotation: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/#proxy-protocol
-            to loadbalancer.yaml also
-            it is described more in details here:
-                https://www.digitalocean.com/community/questions/how-to-set-up-nginx-ingress-for-load-balancers-with-proxy-protocol-support?answer=50244
+                                                                                                The key thing here is to add
+                                                                                                    service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
+                                                                                                        more about this annotation: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/#proxy-protocol
+                                                                                                    to loadbalancer.yaml also
+                                                                                                    it is described more in details here:
+                                                                                                        https://www.digitalocean.com/community/questions/how-to-set-up-nginx-ingress-for-load-balancers-with-proxy-protocol-support?answer=50244
 
 
     ** create https certificate: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
@@ -101,7 +108,7 @@ data:
 
         kubectl get -f loadbalancer.yaml -o jsonpath="{.metadata}"
 
-    * (NOT NECESSARY) Creating loadbalancer in DO (SINGLE CERTIFICATE FOR DIFFERENT DOMAINS - OLD APPROACH):
+    * (WARNING: NOT NECESSARY - OLD APPROACH) Creating loadbalancer in DO (SINGLE CERTIFICATE FOR DIFFERENT DOMAINS):
     -------------------------------
 
         WARNING: we have updated version in link
@@ -113,9 +120,9 @@ data:
 
         And follow: https://cert-manager.io/next-docs/tutorials/acme/ingress/#step-6-configure-let-s-encrypt-issuer
 
-
-
     ** Creating loadbalancer in DO:
+    # WARNING: NOT NEEDED NOW, SINCE CREATING LOADBALANCER IS PART OF deploy.yaml CREATING Nginx Ingress Controller, SEE SECTION ABOVE
+    # WARNING: BE CARFUL THOUGH TO DON'T RUN YAML FILE DIRECTLY WITH kubectl -f https://..../deploy.yaml, download it rather and add name for loadbalancer manually
     -------------------------------
 
         WARNING: we have updated version in link
@@ -138,7 +145,7 @@ data:
                 kubectl describe svc kube-test-loadbalancer
 
 
-    * (NOT NECESSARY) installing cert-manager from:
+    * installing cert-manager from:
     -------------------------------
 
         WARNING: we have updated version in link
@@ -358,7 +365,7 @@ echo "0 * * * * root /bin/bash /home/jenkins/.jenkins/workspace/____clear/run.sh
 
 
 
-    * volumes:
+    * volumes: (WARNING: just read - don't do anything)
     -------------------------------
         # problems in DO [table]:
             https://kubernetes.io/docs/concepts/storage/persistent-volumes/#access-modes
@@ -413,7 +420,7 @@ echo "0 * * * * root /bin/bash /home/jenkins/.jenkins/workspace/____clear/run.sh
                     ceph df
                     rados df   from: https://rook.io/docs/rook/v1.2/ceph-toolbox.html#running-the-toolbox-in-kubernetes
 
-    GlusterFS
+    GlusterFS (WARNING: dont' use it)
     ---------------
         # installing gluster on bare machines:
 
@@ -515,7 +522,7 @@ EOF
 
         # using from Kubernetes     from: https://kubernetes.io/docs/concepts/storage/volumes/#glusterfs
             https://github.com/kubernetes/examples/tree/master/volumes/glusterfs
-    OpenEBS
+    OpenEBS (WARNING: don't do it)
     ---------------
         # installation/configuration (DigitalOcean):
             step 1:
@@ -545,7 +552,7 @@ EOF
             kubectl get blockdevice -n openebs
             kubectl describe blockdevice blockdevice-3457b40abd4d04dbeaa4ae2fdaf3b4a2 -n openebs
 
-    NFS server and DO
+    NFS server and DO (do it, that's current valid approach)
     ---------
     https://www.digitalocean.com/community/tutorials/how-to-set-up-readwritemany-rwx-persistent-volumes-with-nfs-on-digitalocean-kubernetes
         g(How To Set Up ReadWriteMany (RWX) Persistent Volumes with NFS on DigitalOcean Kubernetes)
@@ -558,7 +565,7 @@ EOF
             Instead of using:
                 helm install nfs-server           stable/nfs-server-provisioner --set persistence.enabled=true,persistence.storageClass=do-block-storage,persistence.size=200Gi
                 use:
-                helm install --name nfs-server-20 stable/nfs-server-provisioner --set=persistence.enabled=true,persistence.storageClass=do-block-storage,persistence.size=20Gi,storageClass.name=nfs-20
+                helm install --name nfs-server-20 stable/nfs-server-provisioner --set=persistence.enabled=true,persistence.storageClass=do-block-storage,persistence.size=150Gi,storageClass.name=nfs-150
 
         If reattaching nfs volume is needed use "recycle" button in the k8s cluster.
             This (as we have observed) will automatically reattach volume to different node (even across different poll of nodes).
@@ -569,12 +576,12 @@ EOF
             kubectl delete pod nfs-server-20-nfs-server-provisioner-0  --grace-period=0 --force
                 But when you using previously mentioned "recycle" method you shouldn't need to use this.
 
-    If there is need to resize storageClass then just resize volume through DO admin panel and then follow:
-        https://kubernetes.io/blog/2018/07/12/resizing-persistent-volumes-using-kubernetes/
-        g(Resizing Persistent Volumes using Kubernetes)
+        If there is need to resize PersistentVolumeClaim then just resize volume through DO admin panel and then follow:
+            https://kubernetes.io/blog/2018/07/12/resizing-persistent-volumes-using-kubernetes/
+            g(Resizing Persistent Volumes using Kubernetes)
 
-    Other tricks with NFS:
-        https://code.vmware.com/samples/4552/nfs-server-provisioner-with-rwx-pvc-support-for-scaling-web-front-ends#code
+        Other tricks with NFS:
+            https://code.vmware.com/samples/4552/nfs-server-provisioner-with-rwx-pvc-support-for-scaling-web-front-ends#code
 
 
 kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
