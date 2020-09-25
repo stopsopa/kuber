@@ -55,10 +55,12 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
                 0.30.0 (latest) 2020-03-07
                 wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/nginx-0.34.1/deploy/static/mandatory.yaml
 
-            LATEST !!!!  THEY HAVE CHANGED PROCESS OF INSTALATION, FROM NOW ON IT'S DIFFERENT ON DIFFERENT CLOUD PROVIDERS: https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean
+            LATEST !!!!  THEY HAVE CHANGED PROCESS OF INSTALATION, FROM NOW ON IT'S DIFFERENT INSTALLTION PROCESS ON EACH CLOUD PROVIDERS: https://kubernetes.github.io/ingress-nginx/deploy/#digital-ocean
             # kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/do/deploy.yaml
                 0.34.1 (latest) 2020-08-27
                 wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.34.1/deploy/static/provider/do/deploy.yaml
+                0.34.1 (latest) 2020-09-21
+                wget https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v0.35.0/deploy/static/provider/do/deploy.yaml
 
             WARNING: change: (it was valid for version 0.30.0, now let's try to use as is, without those modification below)
             WARNING: change: (it was valid for version 0.30.0, now let's try to use as is, without those modification below)
@@ -103,7 +105,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
     ** create https certificate: https://www.digitalocean.com/docs/kubernetes/how-to/configure-load-balancers/
     -------------------------------
         doctl compute certificate list
-        doctl compute certificate create --name certv001 --type lets_encrypt --dns-names aml.kub.phaseiilabs.com,www.aml.kub.phaseiilabs.com,lh.kub.phaseiilabs.com,www.lh.kub.phaseiilabs.com
+        doctl compute certificate create --name dotest.lb --type lets_encrypt --dns-names dotest.loadbalancer.cluster.phaseiilabs.com
         doctl compute certificate get eebf2fd0-8331-4432-8d37-87ce0631869a
 
         kubectl get -f loadbalancer.yaml -o jsonpath="{.metadata}"
@@ -565,7 +567,32 @@ EOF
             Instead of using:
                 helm install nfs-server           stable/nfs-server-provisioner --set persistence.enabled=true,persistence.storageClass=do-block-storage,persistence.size=200Gi
                 use:
-                helm install --name nfs-server-20 stable/nfs-server-provisioner --set=persistence.enabled=true,persistence.storageClass=do-block-storage,persistence.size=150Gi,storageClass.name=nfs-150
+                helm install --name nfs-server-21 stable/nfs-server-provisioner --set=persistence.enabled=true,persistence.storageClass=do-block-storage,persistence.size=150Gi,storageClass.name=nfs-150
+
+                    I've asked DO how to explicitly set volume name : https://www.digitalocean.com/community/tutorials/how-to-set-up-readwritemany-rwx-persistent-volumes-with-nfs-on-digitalocean-kubernetes
+
+                    --name nfs-server-20    is responsible for creating     data-nfs-server-20-nfs-server-provisioner-0 pvc:
+                        kubectl get pvc  - will after that list:
+                            NAME                                          STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS       AGE
+                            data-nfs-server-20-nfs-server-provisioner-0   Bound    pvc-b850795b-dcc4-4797-8b4c-0ba9654ef02e   150Gi      RWO            do-block-storage   24m
+                            pvc-1                                         Bound    pvc-63fc9f39-6947-4c4e-a8da-352cbe5dafa8   60Gi       RWX            nfs-150            3m53s
+                            pvc-2                                         Bound    pvc-6ebb5785-4ae5-4d48-a4c7-02fd1a8cbac6   60Gi       RWX            nfs-150            3m34s
+                            pvc-3                                         Bound    pvc-7547578e-6217-4192-b997-2dfe33c80a64   60Gi       RWX            nfs-150            3m20s
+                            pvc-4                                         Bound    pvc-99ec0199-617c-4f7b-935d-7b69e3e58243   60Gi       RWX            nfs-150            3m3s
+
+                        This command will also create new VOLUME which can be seen in DO admin panel
+
+                    HOW TO DELETE release:
+                        https://hub.helm.sh/charts/stable/nfs-server-provisioner
+                        https://github.com/helm/charts/tree/master/stable/nfs-server-provisioner
+                        helm delete nfs-server-28 --purge
+                        to list what can be deleted:
+                            helm ls --all
+
+                this is actualy based on preexisting storageclass >>do-block-storage<<:
+                    kubectl get storageclass
+                    NAME                         PROVISIONER                 RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+                    do-block-storage (default)   dobs.csi.digitalocean.com   Delete          Immediate           true                   171m
 
         If reattaching nfs volume is needed use "recycle" button in the k8s cluster.
             This (as we have observed) will automatically reattach volume to different node (even across different poll of nodes).

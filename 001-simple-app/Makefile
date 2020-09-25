@@ -7,3 +7,6 @@ local:
 
 doc:
 	(cd docker && docker-compose up)
+
+up:
+	/bin/bash update-docker.sh
