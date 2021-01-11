@@ -9,7 +9,15 @@
     cli:
         kubectl doctl:
             # first install and init doctl:
-                 https://github.com/digitalocean/doctl#authenticating-with-digitalocean
+                https://github.com/digitalocean/doctl#authenticating-with-digitalocean
+
+                mac:
+                    https://github.com/digitalocean/doctl#macos
+                        brew install doctl
+                linux:
+                    see latest version: https://github.com/digitalocean/doctl/tags
+                        example: curl -sL https://github.com/digitalocean/doctl/releases/download/v1.54.1/doctl-1.54.1-linux-amd64.tar.gz | tar -xzv
+
              # then copy config
                  https://www.digitalocean.com/docs/kubernetes/how-to/connect-to-cluster/#generating-a-kubectl-configuration-via-command-line
                  doctl auth init   # to get token follow https://github.com/digitalocean/doctl#authenticating-with-digitalocean
