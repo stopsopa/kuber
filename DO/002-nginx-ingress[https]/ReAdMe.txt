@@ -13,7 +13,7 @@
 
                 mac:
                     https://github.com/digitalocean/doctl#macos
-                        brew install doctl
+                        arch -arm64 brew install doctl
                 linux:
                     see latest version: https://github.com/digitalocean/doctl/tags
                         example: curl -sL https://github.com/digitalocean/doctl/releases/download/v1.54.1/doctl-1.54.1-linux-amd64.tar.gz | tar -xzv
