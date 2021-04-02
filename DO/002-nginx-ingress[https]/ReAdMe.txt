@@ -16,7 +16,7 @@
                         arch -arm64 brew install doctl
                 linux:
                     see latest version: https://github.com/digitalocean/doctl/tags
-                        example: curl -sL https://github.com/digitalocean/doctl/releases/download/v1.54.1/doctl-1.54.1-linux-amd64.tar.gz | tar -xzv
+                        example: curl -sL https://github.com/digitalocean/doctl/releases/download/v1.58.0/doctl-1.58.0-linux-amd64.tar.gz | tar -xzv
 
              # then copy config
                  https://www.digitalocean.com/docs/kubernetes/how-to/connect-to-cluster/#generating-a-kubectl-configuration-via-command-line
@@ -37,13 +37,18 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
 
     ** helm
     -------------------------------
-        https://www.digitalocean.com/community/tutorials/how-to-install-software-on-kubernetes-clusters-with-the-helm-package-manager#step-1-%E2%80%94-installing-helm
-        helm version
-            (latest) 2020-03-07
-                Client: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
-                Server: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
 
-        check latest: https://github.com/helm/helm/releases
+        Helm 3 installation:
+            https://helm.sh/docs/intro/install/
+
+        Old version:
+            https://www.digitalocean.com/community/tutorials/how-to-install-software-on-kubernetes-clusters-with-the-helm-package-manager#step-1-%E2%80%94-installing-helm
+            helm version
+                (latest) 2020-03-07
+                    Client: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
+                    Server: &version.Version{SemVer:"v2.16.1", GitCommit:"bbdfe5e7803a12bbdf97e94cd847859890cf4050", GitTreeState:"clean"}
+
+            check latest: https://github.com/helm/helm/releases
 
     ** install tiller
     -------------------------------
@@ -159,6 +164,7 @@ g(Hanif Jetha)How to Set Up an Nginx Ingress with Cert-Manager on DigitalOcean K
     -------------------------------
 
         WARNING: we have updated version in link
+            find latest version: https://github.com/jetstack/cert-manager/tags
 
             kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.12.0/cert-manager.yaml
 
