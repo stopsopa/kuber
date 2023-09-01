@@ -1,3 +1,11 @@
+# DEPRECATED
+Created in 2019 - quite old now and not maintained.
+These were just some heavy experiments with kubernetes.
+
+Nothing to be ashamed here:
+
+I used best tools available at a time and delivered what's needed quickly.
+
 # Installing
 
 https://github.com/tomekwlod/kuber
